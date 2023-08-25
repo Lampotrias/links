@@ -2,6 +2,10 @@
 plugins {
 	alias(libs.plugins.com.android.application)
 	alias(libs.plugins.org.jetbrains.kotlin.android)
+	alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+	alias(libs.plugins.hilt)
+
+	kotlin("kapt")
 }
 
 android {
@@ -42,6 +46,23 @@ dependencies {
 	implementation(libs.appcompat)
 	implementation(libs.material)
 	implementation(libs.constraintlayout)
+	implementation(libs.kotlin.serialization.json)
+	implementation(libs.okhttp)
+	implementation(libs.coroutines)
+	implementation(libs.hilt.android)
+	implementation(libs.room.ktx)
+	implementation(libs.androidx.hilt.common)
+	implementation(libs.androidx.lifecycle)
+	implementation(libs.androidx.activity)
+	implementation(libs.androidx.fragment)
+	implementation(libs.timber)
+	implementation(libs.fresco)
+	implementation(libs.fresco.okhttp)
+
+	kapt(libs.hilt.compiler)
+	kapt(libs.androidx.hilt.compiler)
+	//noinspection KaptUsageInsteadOfKsp
+	kapt(libs.room.compiler)
 
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.test.ext.junit)
