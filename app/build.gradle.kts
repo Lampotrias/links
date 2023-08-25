@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
 	alias(libs.plugins.com.android.application)
 	alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -51,20 +50,32 @@ dependencies {
 	implementation(libs.coroutines)
 	implementation(libs.hilt.android)
 	implementation(libs.room.ktx)
-	implementation(libs.androidx.hilt.common)
+//	implementation(libs.androidx.hilt.common)
 	implementation(libs.androidx.lifecycle)
 	implementation(libs.androidx.activity)
 	implementation(libs.androidx.fragment)
 	implementation(libs.timber)
 	implementation(libs.fresco)
 	implementation(libs.fresco.okhttp)
+	implementation(libs.androidx.junit.ktx)
+	implementation(libs.androidx.runner)
 
 	kapt(libs.hilt.compiler)
-	kapt(libs.androidx.hilt.compiler)
+//	kapt(libs.androidx.hilt.compiler)
 	//noinspection KaptUsageInsteadOfKsp
 	kapt(libs.room.compiler)
 
+	kaptTest(libs.hilt.compiler)
+
+	kaptAndroidTest(libs.hilt.compiler)
+
+	testImplementation(libs.hilt.testing)
 	testImplementation(libs.junit)
+	testImplementation(libs.google.truth)
+	testImplementation(libs.robolectric)
+
+	androidTestImplementation(libs.hilt.testing)
 	androidTestImplementation(libs.androidx.test.ext.junit)
+	androidTestImplementation(libs.google.truth)
 	androidTestImplementation(libs.espresso.core)
 }

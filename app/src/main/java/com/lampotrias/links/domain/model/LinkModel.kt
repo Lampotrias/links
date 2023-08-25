@@ -1,7 +1,7 @@
 package com.lampotrias.links.domain.model
 
 data class LinkModel(
-	val id: String,
+	val id: Long,
 	val dateCreate: Long,
 	val title: String,
 	val description: String,
