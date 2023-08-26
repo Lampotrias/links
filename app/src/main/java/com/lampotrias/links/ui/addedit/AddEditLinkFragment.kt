@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -19,14 +19,25 @@ import com.lampotrias.links.utils.Utils
 import com.lampotrias.links.utils.ext.getPlainText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AddEditLinkFragment : Fragment() {
 
+	private val viewModel: AddEditLinkViewModel by viewModels()
+
 	private var _binding: FragmentAddEditLinkBinding? = null
 	private val binding get() = _binding!!
 
-	private val viewModel: AddEditLinkViewModel by activityViewModels()
+	init {
+		Timber.w("init")
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		Timber.w("onCreate")
+	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
