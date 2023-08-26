@@ -2,9 +2,10 @@ package com.lampotrias.links.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.lampotrias.links.domain.model.LinkModel
 
 @Entity(tableName = "links")
-data class LinkDatabaseModel (
+data class LinkDatabaseModel(
 	@PrimaryKey val id: Long,
 	val dateCreate: Long,
 	val title: String,
@@ -12,3 +13,14 @@ data class LinkDatabaseModel (
 	val url: String,
 	val imageUrl: String,
 )
+
+fun LinkDatabaseModel.asDomainModel(): LinkModel {
+	return LinkModel(
+		id = id,
+		dateCreate = dateCreate,
+		title = title,
+		description = description,
+		url = url,
+		imageUrl = imageUrl
+	)
+}

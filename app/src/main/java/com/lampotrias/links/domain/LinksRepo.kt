@@ -1,10 +1,11 @@
 package com.lampotrias.links.domain
 
 import com.lampotrias.links.domain.model.LinkModel
+import kotlinx.coroutines.flow.Flow
 
 interface LinksRepo {
-	fun addLink(linkModel: LinkModel)
-	fun deleteLink(linkModel: LinkModel)
-	fun getLinks(): List<LinkModel>
-	fun updateLink(linkModel: LinkModel)
+	suspend fun addLink(linkModel: LinkModel)
+	suspend fun deleteLink(linkModel: LinkModel)
+	fun getLinks(): Flow<List<LinkModel>>
+	suspend fun updateLink(linkModel: LinkModel)
 }
