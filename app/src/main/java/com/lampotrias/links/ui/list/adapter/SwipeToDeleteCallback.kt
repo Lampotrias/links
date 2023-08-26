@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -16,7 +18,9 @@ class SwipeToDeleteCallback(
 	private val onSwipe: (Int) -> Unit
 ) : ItemTouchHelper.Callback() {
 
-	private val icon = ContextCompat.getDrawable(context, R.drawable.baseline_delete_24)!!
+	private val icon = ContextCompat.getDrawable(context, R.drawable.baseline_delete_24)!!.apply {
+		colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+	}
 	private lateinit var mView: View
 
 	private val redPaint = Paint().apply {
