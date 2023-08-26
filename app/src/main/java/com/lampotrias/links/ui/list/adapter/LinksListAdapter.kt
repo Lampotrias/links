@@ -53,7 +53,7 @@ class LinksListAdapter(private val listener: LinkEventListener) :
 	override fun onBindViewHolder(holder: LinkViewHolder, position: Int) {
 		val link = links[position]
 
-		holder.bind(link, listener)
+		holder.bind(link, position, listener)
 	}
 
 	override fun getItemCount(): Int {

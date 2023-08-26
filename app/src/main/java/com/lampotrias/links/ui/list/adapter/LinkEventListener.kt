@@ -4,7 +4,7 @@ import com.lampotrias.links.domain.model.LinkModel
 
 interface LinkEventListener {
 	fun onEdit(linkModel: LinkModel)
+	fun onDelete(linkModel: LinkModel, position: Int)
 	fun onShare(linkModel: LinkModel)
-	fun onMore(linkModel: LinkModel)
 	fun onFavorite(linkModel: LinkModel)
 }

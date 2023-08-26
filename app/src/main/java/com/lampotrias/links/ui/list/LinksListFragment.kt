@@ -35,12 +35,11 @@ class LinksListFragment : Fragment() {
 	private val viewModel: LinksListViewModel by activityViewModels()
 	private val linksAdapter = LinksListAdapter(object : LinkEventListener {
 		override fun onEdit(linkModel: LinkModel) {
-			val addEditLinkFragment = AddEditLinkFragment.newInstanceForEdit(linkModel)
-			parentFragmentManager.commit {
-				setReorderingAllowed(true)
-				add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
-				addToBackStack(null)
-			}
+			navigateToEdit(linkModel)
+		}
+
+		override fun onDelete(linkModel: LinkModel, position: Int) {
+			deleteLink(position, linkModel)
 		}
 
 		override fun onShare(linkModel: LinkModel) {
@@ -49,15 +48,20 @@ class LinksListFragment : Fragment() {
 			}
 		}
 
-		override fun onMore(linkModel: LinkModel) {
-
-		}
-
 		override fun onFavorite(linkModel: LinkModel) {
 
 		}
 
 	})
+
+	private fun navigateToEdit(linkModel: LinkModel) {
+		val addEditLinkFragment = AddEditLinkFragment.newInstanceForEdit(linkModel)
+		parentFragmentManager.commit {
+			setReorderingAllowed(true)
+			add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
+			addToBackStack(null)
+		}
+	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -76,30 +80,7 @@ class LinksListFragment : Fragment() {
 			val swipeToDeleteCallback = SwipeToDeleteCallback(
 				requireContext()
 			) { position ->
-				val deletedLink = linksAdapter.getLink(position)
-				linksAdapter.removeItem(position)
-				Snackbar.make(
-					binding.root,
-					"Link was removed from the list.",
-					Snackbar.LENGTH_LONG
-				).apply {
-
-					setAction("UNDO") {
-						linksAdapter.restoreItem(deletedLink, position)
-					}
-					setActionTextColor(Color.YELLOW)
-
-					if (deletedLink != null) {
-						addCallback(object : Snackbar.Callback() {
-							override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-								if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
-									viewModel.deleteLink(deletedLink)
-								}
-							}
-						})
-						show()
-					}
-				}
+				deleteLink(position)
 			}
 			val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
 			itemTouchHelper.attachToRecyclerView(this)
@@ -119,6 +100,34 @@ class LinksListFragment : Fragment() {
 				viewModel.uiState.collect { state ->
 					linksAdapter.setItems(state.links)
 				}
+			}
+		}
+	}
+	private fun deleteLink(position: Int, linkModel: LinkModel? = null) {
+		val deletedLink = linkModel ?: linksAdapter.getLink(position)
+
+		linksAdapter.removeItem(position)
+
+		Snackbar.make(
+			binding.root,
+			"Link was removed from the list.",
+			Snackbar.LENGTH_LONG
+		).apply {
+
+			setAction("UNDO") {
+				linksAdapter.restoreItem(deletedLink, position)
+			}
+			setActionTextColor(Color.YELLOW)
+
+			if (deletedLink != null) {
+				addCallback(object : Snackbar.Callback() {
+					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+						if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
+							viewModel.deleteLink(deletedLink)
+						}
+					}
+				})
+				show()
 			}
 		}
 	}
