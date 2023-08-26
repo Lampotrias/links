@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lampotrias.links.databinding.LinkItemVhBinding
 import com.lampotrias.links.domain.model.LinkModel
 
-class LinksListAdapter : RecyclerView.Adapter<LinkViewHolder>() {
+class LinksListAdapter(private val listener: LinkEventListener) : RecyclerView.Adapter<LinkViewHolder>() {
 	private val links = mutableListOf<LinkModel>()
 
 	fun setItems(newList: List<LinkModel>) {
@@ -31,7 +31,7 @@ class LinksListAdapter : RecyclerView.Adapter<LinkViewHolder>() {
 	override fun onBindViewHolder(holder: LinkViewHolder, position: Int) {
 		val link = links[position]
 
-		holder.bind(link)
+		holder.bind(link, listener)
 	}
 
 	override fun getItemCount(): Int {

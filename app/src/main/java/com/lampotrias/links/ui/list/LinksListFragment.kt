@@ -13,9 +13,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lampotrias.links.R
 import com.lampotrias.links.databinding.FragmentLinksListBinding
+import com.lampotrias.links.domain.model.LinkModel
 import com.lampotrias.links.ui.addedit.AddEditLinkFragment
-import com.lampotrias.links.ui.addedit.FragmentMode
+import com.lampotrias.links.ui.list.adapter.LinkEventListener
 import com.lampotrias.links.ui.list.adapter.LinksListAdapter
+import com.lampotrias.links.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,7 +28,31 @@ class LinksListFragment : Fragment() {
 	private val binding get() = _binding!!
 
 	private val viewModel: LinksListViewModel by activityViewModels()
-	private val linksAdapter = LinksListAdapter()
+	private val linksAdapter = LinksListAdapter(object : LinkEventListener {
+		override fun onEdit(linkModel: LinkModel) {
+			val addEditLinkFragment = AddEditLinkFragment.newInstanceForEdit(linkModel)
+			parentFragmentManager.commit {
+				setReorderingAllowed(true)
+				add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
+				addToBackStack(null)
+			}
+		}
+
+		override fun onShare(linkModel: LinkModel) {
+			activity?.let {
+				Utils.shareUrl(it, linkModel.url)
+			}
+		}
+
+		override fun onMore(linkModel: LinkModel) {
+
+		}
+
+		override fun onFavorite(linkModel: LinkModel) {
+
+		}
+
+	})
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +71,7 @@ class LinksListFragment : Fragment() {
 		}
 
 		binding.floatingActionButton.setOnClickListener {
-			val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd(FragmentMode.Add)
+			val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd()
 			parentFragmentManager.commit {
 				setReorderingAllowed(true)
 				add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")

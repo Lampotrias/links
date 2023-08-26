@@ -2,11 +2,13 @@ package com.lampotrias.links.ui.addedit
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,6 +35,7 @@ class AddEditLinkFragment : Fragment() {
 		Timber.w("init")
 	}
 
+	@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
@@ -50,22 +53,36 @@ class AddEditLinkFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		val mode = requireArguments().getParcelable(MODE_KEY) ?: FragmentMode.Add
+		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_KEY)
+
+		if (mode == FragmentMode.Edit && linkModel != null) {
+			viewModel.setInitialState(linkModel)
+		}
+
+		binding.btnSave.text = when(mode) {
+			FragmentMode.Edit -> "Save"
+			FragmentMode.Add -> "Add"
+		}
+
 		binding.btnCheckUrl.setOnClickListener {
-			if (binding.url.text.isNotEmpty()) {
-				viewModel.getMetadata(binding.url.text.trim().toString())
+			val url = binding.url.editText?.toString()
+
+			if (!url.isNullOrEmpty()) {
+				viewModel.getMetadata(url.trim())
 			}
 		}
 
 		binding.btnInsertFromClipboard.setOnClickListener {
 			val text = (activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
 			if (!text.isNullOrEmpty()) {
-				binding.url.setText(text)
+				binding.url.editText?.setText(text)
 			}
 		}
 
 		binding.btnOpenUrl.setOnClickListener {
-			val url = binding.url.text.toString()
-			if (url.isNotEmpty()) {
+			val url = binding.url.editText?.toString()
+			if (!url.isNullOrEmpty()) {
 				activity?.let {
 					Utils.openUrl(it, url)
 				}
@@ -73,10 +90,11 @@ class AddEditLinkFragment : Fragment() {
 		}
 
 		binding.btnSave.setOnClickListener {
-			if (binding.url.text.isNotEmpty()) {
+			val url = binding.url.editText?.toString()
+			if (!url.isNullOrEmpty()) {
 				viewModel.addLink(
 					LinkModel(
-						url = binding.url.text.toString(),
+						url = url,
 						description = binding.desctiption.text.toString(),
 						title = binding.title.text.toString(),
 						imageUrl = binding.imageUrl.tag?.toString() ?: ""
@@ -98,8 +116,8 @@ class AddEditLinkFragment : Fragment() {
 		viewLifecycleOwner.lifecycleScope.launch {
 			viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.uiState.collect { state ->
-					binding.url.setText(state.urlLink)
-					binding.url.setSelection(binding.url.text.length)
+					binding.url.editText?.setText(state.urlLink)
+					binding.url.editText?.setSelection(binding.url.editText?.text?.length ?: 0)
 
 					binding.title.text = state.titleLink
 					binding.desctiption.text = state.descriptionLink
@@ -130,17 +148,17 @@ class AddEditLinkFragment : Fragment() {
 
 	companion object {
 		private const val MODE_KEY = "mode"
-		private const val LINk_ID_KEY = "mode"
-		fun newInstanceForAdd(mode: FragmentMode) = AddEditLinkFragment().apply {
+		private const val LINk_KEY = "link"
+		fun newInstanceForAdd() = AddEditLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to mode
+				MODE_KEY to FragmentMode.Add
 			)
 		}
 
-		fun newInstanceForEdit(mode: FragmentMode, linkId: String) = AddEditLinkFragment().apply {
+		fun newInstanceForEdit(linkModel: LinkModel) = AddEditLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to mode,
-				LINk_ID_KEY to linkId
+				MODE_KEY to FragmentMode.Edit,
+				LINk_KEY to linkModel
 			)
 		}
 	}

@@ -23,6 +23,17 @@ class AddEditLinkViewModel @Inject constructor(
 	private val _uiState = MutableStateFlow(AddEditUiState())
 	val uiState = _uiState.asStateFlow()
 
+	fun setInitialState(linkModel: LinkModel) {
+		_uiState.update {
+			it.copy(
+				titleLink = linkModel.title,
+				descriptionLink = linkModel.description,
+				urlLink = linkModel.url,
+				imageUrlLink = linkModel.imageUrl,
+			)
+		}
+	}
+
 	fun getMetadata(url: String) {
 		_uiState.update {
 			it.copy(

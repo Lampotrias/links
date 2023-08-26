@@ -5,9 +5,25 @@ import com.lampotrias.links.databinding.LinkItemVhBinding
 import com.lampotrias.links.domain.model.LinkModel
 
 class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewHolder(binding.root) {
-	fun bind(linkModel: LinkModel) {
+	fun bind(linkModel: LinkModel, listener: LinkEventListener) {
 		binding.title.text = linkModel.title.ifEmpty { linkModel.url }
 		binding.desctiption.text = linkModel.description
 		binding.imageUrl.setImageURI(linkModel.imageUrl)
+
+		binding.edit.setOnClickListener {
+			listener.onEdit(linkModel)
+		}
+
+		binding.share.setOnClickListener {
+			listener.onShare(linkModel)
+		}
+
+		binding.moreContainer.setOnClickListener {
+			listener.onMore(linkModel)
+		}
+
+		binding.favoriteContainer.setOnClickListener {
+			listener.onFavorite(linkModel)
+		}
 	}
 }
