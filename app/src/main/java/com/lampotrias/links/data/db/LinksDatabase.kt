@@ -11,4 +11,6 @@ import androidx.room.RoomDatabase
 	exportSchema = false
 )
 
-abstract class LinksDatabase : RoomDatabase()
+abstract class LinksDatabase : RoomDatabase() {
+	abstract fun linksDao(): LinksDao
+}

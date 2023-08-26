@@ -6,13 +6,13 @@ import com.lampotrias.links.domain.model.LinkModel
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AddLinkUseCase @Inject constructor(
+class UpdateLinkUseCase @Inject constructor(
 	private val repo: LinksRepo,
 	private val dispatcherProvider: DispatcherProvider,
 ) {
 	suspend operator fun invoke(linkModel: LinkModel) {
 		withContext(dispatcherProvider.io) {
-			repo.addLink(linkModel)
+			repo.updateLink(linkModel)
 		}
 	}
 }
