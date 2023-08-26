@@ -1,5 +1,7 @@
 package com.lampotrias.links.ui.addedit
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.links.databinding.FragmentAddEditLinkBinding
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.utils.Utils
+import com.lampotrias.links.utils.ext.getPlainText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,12 +45,20 @@ class AddEditLinkFragment : Fragment() {
 			}
 		}
 
-		binding.btnCopyUrl.setOnClickListener {
-
+		binding.btnInsertFromClipboard.setOnClickListener {
+			val text = (activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
+			if (!text.isNullOrEmpty()) {
+				binding.url.setText(text)
+			}
 		}
 
 		binding.btnOpenUrl.setOnClickListener {
-
+			val url = binding.url.text.toString()
+			if (url.isNotEmpty()) {
+				activity?.let {
+					Utils.openUrl(it, url)
+				}
+			}
 		}
 
 		binding.btnSave.setOnClickListener {
