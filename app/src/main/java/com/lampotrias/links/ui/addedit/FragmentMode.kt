@@ -1,6 +1,10 @@
 package com.lampotrias.links.ui.addedit
 
-enum class FragmentMode {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class FragmentMode : Parcelable {
 	Add,
 	Edit
 }

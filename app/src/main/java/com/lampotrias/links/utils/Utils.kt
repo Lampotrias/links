@@ -11,4 +11,11 @@ object Utils {
 		intent.data = Uri.parse(url)
 		activity.startActivity(intent)
 	}
+
+	fun shareUrl(activity: Activity, url: String) {
+		val sharingIntent = Intent(Intent.ACTION_SEND)
+		sharingIntent.type = "text/plain"
+		sharingIntent.putExtra(Intent.EXTRA_TEXT, url)
+		activity.startActivity(Intent.createChooser(sharingIntent, "adadasd"))
+	}
 }

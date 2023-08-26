@@ -1,7 +1,11 @@
 package com.lampotrias.links.domain.model
 
+import android.os.Parcelable
 import com.lampotrias.links.data.db.LinkDatabaseModel
+import kotlinx.parcelize.Parcelize
 
+
+@Parcelize
 data class LinkModel(
 	val id: Long = 0,
 	val dateCreate: Long = System.currentTimeMillis(),
@@ -9,7 +13,7 @@ data class LinkModel(
 	val description: String,
 	val url: String,
 	val imageUrl: String,
-)
+) : Parcelable
 
 fun LinkModel.asDatabaseModel(): LinkDatabaseModel {
 	return LinkDatabaseModel(
