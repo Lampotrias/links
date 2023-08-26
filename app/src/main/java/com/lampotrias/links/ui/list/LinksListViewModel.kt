@@ -2,7 +2,9 @@ package com.lampotrias.links.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lampotrias.links.domain.cases.DeleteLinkUseCase
 import com.lampotrias.links.domain.cases.GetLinksUseCase
+import com.lampotrias.links.domain.model.LinkModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LinksListViewModel @Inject constructor(
 	private val getLinksUseCase: GetLinksUseCase,
+	private val deleteLinkUseCase: DeleteLinkUseCase,
 ) : ViewModel() {
 
 
@@ -28,6 +31,12 @@ class LinksListViewModel @Inject constructor(
 					)
 				}
 			}
+		}
+	}
+
+	fun deleteLink(linkModel: LinkModel) {
+		viewModelScope.launch {
+			deleteLinkUseCase.invoke(linkModel)
 		}
 	}
 }

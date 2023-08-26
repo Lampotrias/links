@@ -66,7 +66,7 @@ class AddEditLinkFragment : Fragment() {
 		}
 
 		binding.btnCheckUrl.setOnClickListener {
-			val url = binding.url.editText?.toString()
+			val url = binding.url.editText?.text?.toString()
 
 			if (!url.isNullOrEmpty()) {
 				viewModel.getMetadata(url.trim())
