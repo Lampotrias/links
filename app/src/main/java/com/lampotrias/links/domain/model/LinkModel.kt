@@ -3,8 +3,8 @@ package com.lampotrias.links.domain.model
 import com.lampotrias.links.data.db.LinkDatabaseModel
 
 data class LinkModel(
-	val id: Long,
-	val dateCreate: Long,
+	val id: Long = 0,
+	val dateCreate: Long = System.currentTimeMillis(),
 	val title: String,
 	val description: String,
 	val url: String,

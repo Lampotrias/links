@@ -13,9 +13,9 @@ class LinksStorage @Inject constructor(
 	private val linksDao: LinksDao,
 	private val dispatcherProvider: DispatcherProvider,
 ) : LinksRepo {
-	override suspend fun addLink(linkModel: LinkModel) {
-		withContext(dispatcherProvider.io) {
-			linksDao.addLink(linkModel.asDatabaseModel())
+	override suspend fun addLink(linkModel: LinkModel): Long {
+		return withContext(dispatcherProvider.io) {
+			return@withContext linksDao.addLink(linkModel.asDatabaseModel())
 		}
 	}
 

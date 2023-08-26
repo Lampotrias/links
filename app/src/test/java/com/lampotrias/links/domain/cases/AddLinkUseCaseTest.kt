@@ -29,8 +29,10 @@ class AddLinkUseCaseTest {
 
 	private val linksRepo = object : LinksRepo {
 		private val links = mutableListOf<LinkModel>()
-		override suspend fun addLink(linkModel: LinkModel) {
+		override suspend fun addLink(linkModel: LinkModel): Long {
 			links.add(linkModel)
+
+			return linkModel.id
 		}
 
 		override suspend fun deleteLink(linkModel: LinkModel) {

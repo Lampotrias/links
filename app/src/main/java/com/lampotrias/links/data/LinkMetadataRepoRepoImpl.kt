@@ -26,6 +26,10 @@ class LinkMetadataRepoRepoImpl(private val httpClient: OkHttpClient) : LinkMetad
 				} ?: ""
 
 				val title = responseJson.optString("title")
+				if (title.isEmpty()) {
+					throw RuntimeException("remote title is empty")
+				}
+
 				val description = responseJson.optString("description")
 
 				return Result.success(
