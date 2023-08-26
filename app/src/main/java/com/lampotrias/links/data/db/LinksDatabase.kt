@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 	entities = [
 		LinkDatabaseModel::class
 	],
-	version = 1,
+	version = 2,
 	exportSchema = false
 )
 
