@@ -10,9 +10,14 @@ class AddLinkUseCase @Inject constructor(
 	private val repo: LinksRepo,
 	private val dispatcherProvider: DispatcherProvider,
 ) {
-	suspend operator fun invoke(linkModel: LinkModel) {
-		withContext(dispatcherProvider.io) {
-			repo.addLink(linkModel)
+	suspend operator fun invoke(linkModel: LinkModel): Result<Long> {
+		return withContext(dispatcherProvider.io) {
+			return@withContext try {
+				val id = repo.addLink(linkModel)
+				Result.success(id)
+			} catch (ex: Exception) {
+				Result.failure(ex)
+			}
 		}
 	}
 }

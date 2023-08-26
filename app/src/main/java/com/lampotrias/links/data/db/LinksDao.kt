@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LinksDao {
 	@Upsert
-	fun addLink(linkDatabaseModel: LinkDatabaseModel)
+	fun addLink(linkDatabaseModel: LinkDatabaseModel): Long
 	@Query("DELETE FROM links WHERE id = :linkId")
 	fun deleteLink(linkId: Long)
 	@Query("SELECT * FROM links ORDER BY dateCreate DESC")
