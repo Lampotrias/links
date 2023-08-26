@@ -16,6 +16,7 @@ class AddLinkUseCase @Inject constructor(
 				val id = repo.addLink(linkModel)
 				Result.success(id)
 			} catch (ex: Exception) {
+				ex.printStackTrace()
 				Result.failure(ex)
 			}
 		}

@@ -6,7 +6,7 @@ import com.lampotrias.links.domain.model.LinkModel
 
 @Entity(tableName = "links")
 data class LinkDatabaseModel(
-	@PrimaryKey val id: Long,
+	@PrimaryKey(autoGenerate = true) val id: Long,
 	val dateCreate: Long,
 	val title: String,
 	val description: String,

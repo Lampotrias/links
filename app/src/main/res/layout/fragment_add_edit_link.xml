@@ -86,7 +86,7 @@
         tools:text="sdadasdasdasdad asdsadsaasda sdasdasd asdasdasd asdas" />
 
     <Button
-        android:id="@+id/save"
+        android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="20dp"

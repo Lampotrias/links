@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.links.databinding.FragmentAddEditLinkBinding
+import com.lampotrias.links.domain.model.LinkModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,6 +49,25 @@ class AddEditLinkFragment : Fragment() {
 
 		}
 
+		binding.btnSave.setOnClickListener {
+			if (binding.url.text.isNotEmpty()) {
+				viewModel.addLink(
+					LinkModel(
+						url = binding.url.text.toString(),
+						description = binding.desctiption.text.toString(),
+						title = binding.title.text.toString(),
+						imageUrl = binding.imageUrl.tag?.toString() ?: ""
+					)
+				)
+			} else {
+				Toast.makeText(
+					requireContext(),
+					"Empty url",
+					Toast.LENGTH_SHORT
+				).show()
+			}
+		}
+
 		subscribeEvents()
 	}
 
@@ -60,7 +80,10 @@ class AddEditLinkFragment : Fragment() {
 
 					binding.title.text = state.titleLink
 					binding.desctiption.text = state.descriptionLink
-					binding.imageUrl.setImageURI(state.imageUrlLink)
+					with(binding.imageUrl) {
+						setImageURI(state.imageUrlLink)
+						tag = state.imageUrlLink
+					}
 
 					state.error?.getContentIfNotHandled()?.let {
 						Toast.makeText(
