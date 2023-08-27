@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
-import androidx.fragment.app.commit
-import com.lampotrias.links.ui.addedit.AddEditLinkFragment
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.lampotrias.links.data.workmanager.MetadataCreateWorker
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,12 +33,25 @@ class MainActivity : AppCompatActivity() {
 			val url = intent.getStringExtra(Intent.EXTRA_TEXT)
 
 			if (url?.startsWith("http") == true) {
-				val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd(url)
-				supportFragmentManager.commit {
-					setReorderingAllowed(true)
-					add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
-					addToBackStack(null)
-				}
+//				val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd(url)
+//				supportFragmentManager.commit {
+//					setReorderingAllowed(true)
+//					add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
+//					addToBackStack(null)
+//				}
+
+				val builder = Data.Builder()
+					.putString(MetadataCreateWorker.URL_KEY, url)
+					.build()
+
+				val worker = OneTimeWorkRequestBuilder<MetadataCreateWorker>()
+					.setInputData(builder)
+					.build()
+
+
+				WorkManager.getInstance(this)
+					.enqueue(worker)
+
 			}
 		}
 	}
