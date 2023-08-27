@@ -55,7 +55,8 @@ dependencies {
 	implementation(libs.coroutines)
 	implementation(libs.hilt.android)
 	implementation(libs.room.ktx)
-//	implementation(libs.androidx.hilt.common)
+	implementation(libs.androidx.workmanager)
+	implementation(libs.androidx.hilt.common)
 	implementation(libs.androidx.lifecycle)
 	implementation(libs.androidx.activity)
 	implementation(libs.androidx.fragment)
@@ -66,7 +67,7 @@ dependencies {
 	implementation(libs.androidx.runner)
 
 	kapt(libs.hilt.compiler)
-//	kapt(libs.androidx.hilt.compiler)
+	kapt(libs.androidx.hilt.compiler)
 	//noinspection KaptUsageInsteadOfKsp
 	kapt(libs.room.compiler)
 

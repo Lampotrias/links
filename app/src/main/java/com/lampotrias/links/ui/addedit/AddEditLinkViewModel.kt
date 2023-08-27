@@ -34,6 +34,14 @@ class AddEditLinkViewModel @Inject constructor(
 		}
 	}
 
+	fun setInitialUrl(url: String) {
+		_uiState.update {
+			it.copy(
+				urlLink = url,
+			)
+		}
+	}
+
 	fun getMetadata(url: String) {
 		_uiState.update {
 			it.copy(
