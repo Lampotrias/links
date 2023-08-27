@@ -56,6 +56,11 @@ class AddEditLinkFragment : Fragment() {
 		val mode = requireArguments().getParcelable(MODE_KEY) ?: FragmentMode.Add
 		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_KEY)
 
+		if (mode == FragmentMode.Add) {
+			val externalUrl = requireArguments().getString(URL_KEY) ?: ""
+			viewModel.setInitialUrl(externalUrl)
+		}
+
 		if (mode == FragmentMode.Edit && linkModel != null) {
 			viewModel.setInitialState(linkModel)
 		}
@@ -148,10 +153,12 @@ class AddEditLinkFragment : Fragment() {
 
 	companion object {
 		private const val MODE_KEY = "mode"
+		private const val URL_KEY = "mode"
 		private const val LINk_KEY = "link"
-		fun newInstanceForAdd() = AddEditLinkFragment().apply {
+		fun newInstanceForAdd(url: String = "") = AddEditLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Add
+				MODE_KEY to FragmentMode.Add,
+				URL_KEY to url
 			)
 		}
 
