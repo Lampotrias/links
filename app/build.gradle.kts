@@ -55,6 +55,7 @@ dependencies {
 	implementation(libs.coroutines)
 	implementation(libs.hilt.android)
 	implementation(libs.room.ktx)
+	implementation(libs.androidx.workmanager)
 //	implementation(libs.androidx.hilt.common)
 	implementation(libs.androidx.lifecycle)
 	implementation(libs.androidx.activity)
