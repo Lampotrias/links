@@ -25,6 +25,12 @@ class LinksStorage @Inject constructor(
 		}
 	}
 
+	override suspend fun restoreLink(linkModel: LinkModel) {
+		withContext(dispatcherProvider.io) {
+			linksDao.restoreLink(linkModel.id)
+		}
+	}
+
 	override fun getLinks(): Flow<List<LinkModel>> {
 		return linksDao.getLinks()
 			.map {

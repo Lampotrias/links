@@ -117,10 +117,12 @@ class LinksListFragment : Fragment() {
 			}
 		}
 	}
+
 	private fun deleteLink(position: Int, linkModel: LinkModel? = null) {
-		val deletedLink = linkModel ?: linksAdapter.getLink(position)
+		val deletedLink = linkModel ?: linksAdapter.getLink(position) ?: return
 
 		linksAdapter.removeItem(position)
+
 
 		Snackbar.make(
 			binding.root,
@@ -130,19 +132,20 @@ class LinksListFragment : Fragment() {
 
 			setAction("UNDO") {
 				linksAdapter.restoreItem(deletedLink, position)
+				viewModel.restoreLink(deletedLink)
 			}
 			setActionTextColor(Color.YELLOW)
 
-			if (deletedLink != null) {
-				addCallback(object : Snackbar.Callback() {
-					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-						if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
-							viewModel.deleteLink(deletedLink)
-						}
-					}
-				})
-				show()
-			}
+			viewModel.deleteLink(deletedLink)
+
+//				addCallback(object : Snackbar.Callback() {
+//					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+//						if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
+//							viewModel.deleteLink(deletedLink)
+//						}
+//					}
+//				})
+			show()
 		}
 	}
 }
