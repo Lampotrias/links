@@ -84,6 +84,24 @@
                 app:tint="?attr/colorPrimary" />
         </FrameLayout>
 
+        <FrameLayout
+            android:id="@+id/qr_code"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/share"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/share">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/baseline_qr_code_24" />
+        </FrameLayout>
+
+
         <Button
             android:id="@+id/share"
             style="?attr/materialButtonOutlinedStyle"
@@ -94,8 +112,8 @@
             android:text="Share"
             app:icon="@drawable/baseline_share_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintEnd_toStartOf="@+id/detail"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 

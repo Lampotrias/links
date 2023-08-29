@@ -23,6 +23,9 @@ androidxFragment = "1.6.1"
 fresco = "2.6.0"
 work-manager = "2.8.1"
 timber = "5.0.1"
+zxing = "4.3.0"
+legacy-support-v4 = "1.0.0"
+lifecycle-livedata-ktx = "2.6.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -54,6 +57,9 @@ androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version 
 androidx-runner = { group = "androidx.test", name = "runner", version = "1.5.2" }
 google-truth = { group = "com.google.truth", name = "truth", version.ref = "google-truth" }
 androidx-workmanager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
+zxing = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "zxing" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
+lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle-livedata-ktx" }
 
 
 [plugins]

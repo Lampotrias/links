@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -22,6 +22,7 @@ import com.lampotrias.links.ui.addshow.AddShowLinkFragment
 import com.lampotrias.links.ui.list.adapter.LinkEventListener
 import com.lampotrias.links.ui.list.adapter.LinksListAdapter
 import com.lampotrias.links.ui.list.adapter.SwipeToDeleteCallback
+import com.lampotrias.links.ui.qrcode.QRCodeGenerateFragment
 import com.lampotrias.links.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -33,10 +34,14 @@ class LinksListFragment : Fragment() {
 	private var _binding: FragmentLinksListBinding? = null
 	private val binding get() = _binding!!
 
-	private val viewModel: LinksListViewModel by activityViewModels()
+	private val viewModel: LinksListViewModel by viewModels()
 	private val linksAdapter = LinksListAdapter(object : LinkEventListener {
 		override fun onDetail(linkModel: LinkModel) {
 			navigateToDetail(linkModel)
+		}
+
+		override fun onQrCode(linkModel: LinkModel) {
+			navigateToQrCode(linkModel)
 		}
 
 		override fun onDelete(linkModel: LinkModel, position: Int) {
@@ -59,6 +64,15 @@ class LinksListFragment : Fragment() {
 		parentFragmentManager.commit {
 			setReorderingAllowed(true)
 			add(R.id.main_fragment_container, addShowLinkFragment, "add-detail")
+			addToBackStack(null)
+		}
+	}
+
+	private fun navigateToQrCode(linkModel: LinkModel) {
+		val qrCodeGenerateFragment = QRCodeGenerateFragment.newInstance(linkModel.url)
+		parentFragmentManager.commit {
+			setReorderingAllowed(true)
+			add(R.id.main_fragment_container, qrCodeGenerateFragment, "qrcode-generator")
 			addToBackStack(null)
 		}
 	}

@@ -65,6 +65,9 @@ dependencies {
 	implementation(libs.fresco.okhttp)
 	implementation(libs.androidx.junit.ktx)
 	implementation(libs.androidx.runner)
+	implementation(libs.zxing)
+	implementation(libs.legacy.support.v4)
+	implementation(libs.lifecycle.livedata.ktx)
 
 	kapt(libs.hilt.compiler)
 	kapt(libs.androidx.hilt.compiler)
