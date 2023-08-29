@@ -1,4 +1,4 @@
-package com.lampotrias.links.ui.addedit
+package com.lampotrias.links.ui.addshow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,13 +14,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddEditLinkViewModel @Inject constructor(
+class AddShowLinkViewModel @Inject constructor(
 	private val addLinkUseCase: AddLinkUseCase,
 //	private val edUseCase: AddLinkUseCase,
 	private val getLinkMetadataUseCase: GetLinkMetadataUseCase,
 ) : ViewModel() {
 
-	private val _uiState = MutableStateFlow(AddEditUiState())
+	private val _uiState = MutableStateFlow(AddShodUiState())
 	val uiState = _uiState.asStateFlow()
 
 	fun setInitialState(linkModel: LinkModel) {

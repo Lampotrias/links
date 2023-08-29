@@ -1,4 +1,4 @@
-package com.lampotrias.links.ui.addedit
+package com.lampotrias.links.ui.addshow
 
 import android.content.ClipboardManager
 import android.content.Context
@@ -15,7 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.lampotrias.links.databinding.FragmentAddEditLinkBinding
+import com.lampotrias.links.databinding.FragmentAddShowLinkBinding
 import com.lampotrias.links.domain.model.LinkModel
 import com.lampotrias.links.utils.Utils
 import com.lampotrias.links.utils.ext.getPlainText
@@ -24,11 +24,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AddEditLinkFragment : Fragment() {
+class AddShowLinkFragment : Fragment() {
 
-	private val viewModel: AddEditLinkViewModel by viewModels()
+	private val viewModel: AddShowLinkViewModel by viewModels()
 
-	private var _binding: FragmentAddEditLinkBinding? = null
+	private var _binding: FragmentAddShowLinkBinding? = null
 	private val binding get() = _binding!!
 
 	init {
@@ -46,7 +46,7 @@ class AddEditLinkFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		_binding = FragmentAddEditLinkBinding.inflate(inflater, container, false)
+		_binding = FragmentAddShowLinkBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
@@ -61,13 +61,23 @@ class AddEditLinkFragment : Fragment() {
 			viewModel.setInitialUrl(externalUrl)
 		}
 
-		if (mode == FragmentMode.Edit && linkModel != null) {
+		if (mode == FragmentMode.Show && linkModel != null) {
 			viewModel.setInitialState(linkModel)
 		}
 
-		binding.btnSave.text = when(mode) {
-			FragmentMode.Edit -> "Save"
-			FragmentMode.Add -> "Add"
+		when(mode) {
+			FragmentMode.Show -> {
+				binding.btnSave.text = "Save"
+				binding.btnSave.visibility = View.INVISIBLE
+				binding.btnInsertFromClipboard.visibility = View.INVISIBLE
+				binding.btnCheckUrl.visibility = View.INVISIBLE
+			}
+			FragmentMode.Add -> {
+				binding.btnSave.text = "Add"
+				binding.btnSave.visibility = View.VISIBLE
+				binding.btnInsertFromClipboard.visibility = View.VISIBLE
+				binding.btnCheckUrl.visibility = View.VISIBLE
+			}
 		}
 
 		binding.btnCheckUrl.setOnClickListener {
@@ -153,18 +163,18 @@ class AddEditLinkFragment : Fragment() {
 
 	companion object {
 		private const val MODE_KEY = "mode"
-		private const val URL_KEY = "mode"
+		private const val URL_KEY = "url"
 		private const val LINk_KEY = "link"
-		fun newInstanceForAdd(url: String = "") = AddEditLinkFragment().apply {
+		fun newInstanceForAdd(url: String = "") = AddShowLinkFragment().apply {
 			arguments = bundleOf(
 				MODE_KEY to FragmentMode.Add,
 				URL_KEY to url
 			)
 		}
 
-		fun newInstanceForEdit(linkModel: LinkModel) = AddEditLinkFragment().apply {
+		fun newInstanceForDetail(linkModel: LinkModel) = AddShowLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Edit,
+				MODE_KEY to FragmentMode.Show,
 				LINk_KEY to linkModel
 			)
 		}

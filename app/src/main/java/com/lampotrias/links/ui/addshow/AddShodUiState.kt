@@ -1,8 +1,8 @@
-package com.lampotrias.links.ui.addedit
+package com.lampotrias.links.ui.addshow
 
 import com.lampotrias.links.utils.OneShotEvent
 
-data class AddEditUiState(
+data class AddShodUiState(
 	val showLoading: Boolean = false,
 	val titleLink: String = "",
 	val descriptionLink: String = "",
