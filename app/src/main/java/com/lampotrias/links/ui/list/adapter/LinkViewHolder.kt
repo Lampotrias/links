@@ -12,8 +12,8 @@ class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewH
 		binding.desctiption.text = linkModel.description
 		binding.imageUrl.setImageURI(linkModel.imageUrl)
 
-		binding.edit.setOnClickListener {
-			listener.onEdit(linkModel)
+		binding.detail.setOnClickListener {
+			listener.onDetail(linkModel)
 		}
 
 		binding.share.setOnClickListener {
@@ -25,8 +25,8 @@ class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewH
 			popupMenu.inflate(R.menu.more_link_menu)
 			popupMenu.setOnMenuItemClickListener { item ->
 				when (item.itemId) {
-					R.id.action_edit -> {
-						listener.onEdit(linkModel)
+					R.id.action_show -> {
+						listener.onDetail(linkModel)
 					}
 
 					R.id.action_delete -> {

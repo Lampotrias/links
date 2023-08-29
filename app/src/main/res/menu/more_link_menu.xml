@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_edit"
-        android:icon="@drawable/baseline_edit_24"
-        android:title="Edit" />
+        android:id="@+id/action_show"
+        android:icon="@drawable/baseline_remove_red_eye_24"
+        android:title="Detail" />
     <group android:id="@+id/group_delete">
         <item
             android:id="@+id/action_delete"

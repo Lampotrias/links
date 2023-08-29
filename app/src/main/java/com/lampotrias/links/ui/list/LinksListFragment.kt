@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.lampotrias.links.R
 import com.lampotrias.links.databinding.FragmentLinksListBinding
 import com.lampotrias.links.domain.model.LinkModel
-import com.lampotrias.links.ui.addedit.AddEditLinkFragment
+import com.lampotrias.links.ui.addshow.AddShowLinkFragment
 import com.lampotrias.links.ui.list.adapter.LinkEventListener
 import com.lampotrias.links.ui.list.adapter.LinksListAdapter
 import com.lampotrias.links.ui.list.adapter.SwipeToDeleteCallback
@@ -35,8 +35,8 @@ class LinksListFragment : Fragment() {
 
 	private val viewModel: LinksListViewModel by activityViewModels()
 	private val linksAdapter = LinksListAdapter(object : LinkEventListener {
-		override fun onEdit(linkModel: LinkModel) {
-			navigateToEdit(linkModel)
+		override fun onDetail(linkModel: LinkModel) {
+			navigateToDetail(linkModel)
 		}
 
 		override fun onDelete(linkModel: LinkModel, position: Int) {
@@ -54,11 +54,11 @@ class LinksListFragment : Fragment() {
 		}
 	})
 
-	private fun navigateToEdit(linkModel: LinkModel) {
-		val addEditLinkFragment = AddEditLinkFragment.newInstanceForEdit(linkModel)
+	private fun navigateToDetail(linkModel: LinkModel) {
+		val addShowLinkFragment = AddShowLinkFragment.newInstanceForDetail(linkModel)
 		parentFragmentManager.commit {
 			setReorderingAllowed(true)
-			add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
+			add(R.id.main_fragment_container, addShowLinkFragment, "add-detail")
 			addToBackStack(null)
 		}
 	}
@@ -87,10 +87,10 @@ class LinksListFragment : Fragment() {
 		}
 
 		binding.floatingActionButton.setOnClickListener {
-			val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd()
+			val addShowLinkFragment = AddShowLinkFragment.newInstanceForAdd()
 			parentFragmentManager.commit {
 				setReorderingAllowed(true)
-				add(R.id.main_fragment_container, addEditLinkFragment, "add-edit")
+				add(R.id.main_fragment_container, addShowLinkFragment, "add-detail")
 				addToBackStack(null)
 			}
 		}
