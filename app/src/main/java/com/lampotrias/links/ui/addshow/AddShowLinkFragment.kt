@@ -54,7 +54,7 @@ class AddShowLinkFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 
 		val mode = requireArguments().getParcelable(MODE_KEY) ?: FragmentMode.Add
-		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_KEY)
+		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_MODEL_KEY)
 
 		if (mode == FragmentMode.Add) {
 			val externalUrl = requireArguments().getString(URL_KEY) ?: ""
@@ -164,7 +164,7 @@ class AddShowLinkFragment : Fragment() {
 	companion object {
 		private const val MODE_KEY = "mode"
 		private const val URL_KEY = "url"
-		private const val LINk_KEY = "link"
+		private const val LINk_MODEL_KEY = "link_model_key"
 		fun newInstanceForAdd(url: String = "") = AddShowLinkFragment().apply {
 			arguments = bundleOf(
 				MODE_KEY to FragmentMode.Add,
@@ -175,7 +175,7 @@ class AddShowLinkFragment : Fragment() {
 		fun newInstanceForDetail(linkModel: LinkModel) = AddShowLinkFragment().apply {
 			arguments = bundleOf(
 				MODE_KEY to FragmentMode.Show,
-				LINk_KEY to linkModel
+				LINk_MODEL_KEY to linkModel
 			)
 		}
 	}

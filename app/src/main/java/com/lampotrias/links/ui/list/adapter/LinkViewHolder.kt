@@ -20,6 +20,10 @@ class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewH
 			listener.onShare(linkModel)
 		}
 
+		binding.qrCode.setOnClickListener {
+			listener.onQrCode(linkModel)
+		}
+
 		binding.moreContainer.setOnClickListener {
 			val popupMenu = PopupMenu(binding.root.context, binding.moreIcon)
 			popupMenu.inflate(R.menu.more_link_menu)
