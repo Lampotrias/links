@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.Flow
 interface LinksDao {
 	@Upsert
 	fun addLink(linkDatabaseModel: LinkDatabaseModel): Long
-	@Query("DELETE FROM links WHERE id = :linkId")
+	@Query("UPDATE links SET markDeleted = 1 WHERE id = :linkId")
 	fun deleteLink(linkId: Long)
-	@Query("SELECT * FROM links ORDER BY dateCreate DESC")
+	@Query("UPDATE links SET markDeleted = 0 WHERE id = :linkId")
+	fun restoreLink(linkId: Long)
+	@Query("SELECT * FROM links WHERE markDeleted = 0 ORDER BY dateCreate DESC")
 	fun getLinks(): Flow<List<LinkDatabaseModel>>
 	@Update
 	fun updateLink(linkDatabaseModel: LinkDatabaseModel)

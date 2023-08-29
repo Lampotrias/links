@@ -12,6 +12,7 @@ data class LinkDatabaseModel(
 	val description: String,
 	val url: String,
 	val imageUrl: String,
+	val markDeleted: Boolean = false,
 )
 
 fun LinkDatabaseModel.asDomainModel(): LinkModel {
