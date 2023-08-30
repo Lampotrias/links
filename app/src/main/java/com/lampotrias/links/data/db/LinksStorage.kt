@@ -45,4 +45,10 @@ class LinksStorage @Inject constructor(
 			linksDao.updateLink(linkModel.asDatabaseModel())
 		}
 	}
+
+	override suspend fun updateFavorite(linkModel: LinkModel) {
+		withContext(dispatcherProvider.io) {
+			linksDao.updateFavorite(linkModel.id)
+		}
+	}
 }

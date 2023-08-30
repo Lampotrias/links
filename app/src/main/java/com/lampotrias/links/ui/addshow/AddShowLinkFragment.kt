@@ -112,7 +112,7 @@ class AddShowLinkFragment : Fragment() {
 						url = url,
 						description = binding.desctiption.text.toString(),
 						title = binding.title.text.toString(),
-						imageUrl = binding.imageUrl.tag?.toString() ?: ""
+						imageUrl = binding.imageUrl.tag?.toString() ?: "",
 					)
 				)
 			} else {

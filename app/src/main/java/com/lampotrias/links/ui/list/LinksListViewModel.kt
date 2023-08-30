@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lampotrias.links.domain.cases.DeleteLinkUseCase
 import com.lampotrias.links.domain.cases.GetLinksUseCase
 import com.lampotrias.links.domain.cases.RestoreLinkUseCase
+import com.lampotrias.links.domain.cases.UpdateFavoriteLinkUseCase
 import com.lampotrias.links.domain.model.LinkModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ class LinksListViewModel @Inject constructor(
 	private val getLinksUseCase: GetLinksUseCase,
 	private val deleteLinkUseCase: DeleteLinkUseCase,
 	private val restoreLinkUseCase: RestoreLinkUseCase,
+	private val updateFavoriteLinkUseCase: UpdateFavoriteLinkUseCase,
 ) : ViewModel() {
 
 
@@ -45,6 +47,12 @@ class LinksListViewModel @Inject constructor(
 	fun restoreLink(linkModel: LinkModel) {
 		viewModelScope.launch {
 			restoreLinkUseCase.invoke(linkModel)
+		}
+	}
+
+	fun updateFavorite(linkModel: LinkModel) {
+		viewModelScope.launch {
+			updateFavoriteLinkUseCase.invoke(linkModel)
 		}
 	}
 }

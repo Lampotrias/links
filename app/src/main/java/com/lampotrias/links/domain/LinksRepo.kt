@@ -9,4 +9,5 @@ interface LinksRepo {
 	suspend fun restoreLink(linkModel: LinkModel)
 	fun getLinks(): Flow<List<LinkModel>>
 	suspend fun updateLink(linkModel: LinkModel)
+	suspend fun updateFavorite(linkModel: LinkModel)
 }
