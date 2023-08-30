@@ -14,10 +14,10 @@ class LinksListAdapter(private val listener: LinkEventListener) :
 
 	fun setItems(newList: List<LinkModel>) {
 		val diffResult = DiffUtil.calculateDiff(LinksDiffUtil(links, newList))
+		diffResult.dispatchUpdatesTo(this)
+
 		links.clear()
 		links.addAll(newList)
-
-		diffResult.dispatchUpdatesTo(this)
 	}
 
 	fun removeItem(position: Int) {
@@ -54,6 +54,14 @@ class LinksListAdapter(private val listener: LinkEventListener) :
 		val link = links[position]
 
 		holder.bind(link, position, listener)
+	}
+
+	override fun onBindViewHolder(
+		holder: LinkViewHolder,
+		position: Int,
+		payloads: MutableList<Any>
+	) {
+		super.onBindViewHolder(holder, position, payloads)
 	}
 
 	override fun getItemCount(): Int {
