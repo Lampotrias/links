@@ -53,26 +53,26 @@ class AddShowLinkFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		val mode = requireArguments().getParcelable(MODE_KEY) ?: FragmentMode.Add
+		val mode = requireArguments().getParcelable(DETAIL_MODE_KEY) ?: FragmentDetailMode.Add
 		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_MODEL_KEY)
 
-		if (mode == FragmentMode.Add) {
+		if (mode == FragmentDetailMode.Add) {
 			val externalUrl = requireArguments().getString(URL_KEY) ?: ""
 			viewModel.setInitialUrl(externalUrl)
 		}
 
-		if (mode == FragmentMode.Show && linkModel != null) {
+		if (mode == FragmentDetailMode.Show && linkModel != null) {
 			viewModel.setInitialState(linkModel)
 		}
 
 		when(mode) {
-			FragmentMode.Show -> {
+			FragmentDetailMode.Show -> {
 				binding.btnSave.text = "Save"
 				binding.btnSave.visibility = View.INVISIBLE
 				binding.btnInsertFromClipboard.visibility = View.INVISIBLE
 				binding.btnCheckUrl.visibility = View.INVISIBLE
 			}
-			FragmentMode.Add -> {
+			FragmentDetailMode.Add -> {
 				binding.btnSave.text = "Add"
 				binding.btnSave.visibility = View.VISIBLE
 				binding.btnInsertFromClipboard.visibility = View.VISIBLE
@@ -162,19 +162,19 @@ class AddShowLinkFragment : Fragment() {
 	}
 
 	companion object {
-		private const val MODE_KEY = "mode"
+		private const val DETAIL_MODE_KEY = "mode"
 		private const val URL_KEY = "url"
 		private const val LINk_MODEL_KEY = "link_model_key"
 		fun newInstanceForAdd(url: String = "") = AddShowLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Add,
+				DETAIL_MODE_KEY to FragmentDetailMode.Add,
 				URL_KEY to url
 			)
 		}
 
 		fun newInstanceForDetail(linkModel: LinkModel) = AddShowLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Show,
+				DETAIL_MODE_KEY to FragmentDetailMode.Show,
 				LINk_MODEL_KEY to linkModel
 			)
 		}

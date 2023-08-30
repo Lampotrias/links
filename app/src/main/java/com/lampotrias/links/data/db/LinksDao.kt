@@ -18,7 +18,10 @@ interface LinksDao {
 	fun restoreLink(linkId: Long)
 
 	@Query("SELECT * FROM links WHERE markDeleted = 0 ORDER BY dateCreate DESC")
-	fun getLinks(): Flow<List<LinkDatabaseModel>>
+	fun getAllLinks(): Flow<List<LinkDatabaseModel>>
+
+	@Query("SELECT * FROM links WHERE markDeleted = 0 AND isFavorite = 1 ORDER BY dateCreate DESC")
+	fun getFavoritesLinks(): Flow<List<LinkDatabaseModel>>
 
 	@Update
 	fun updateLink(linkDatabaseModel: LinkDatabaseModel)

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class FragmentMode : Parcelable {
+enum class FragmentDetailMode : Parcelable {
 	Add,
 	Show
 }

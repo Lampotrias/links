@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -73,6 +74,15 @@ class LinksListFragment : Fragment() {
 			setReorderingAllowed(true)
 			add(R.id.main_fragment_container, qrCodeGenerateFragment, "qrcode-generator")
 			addToBackStack(null)
+		}
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+
+		when(arguments?.getParcelable(LIST_MODE_KEY) ?: FragmentListMode.All) {
+			FragmentListMode.All -> viewModel.streamAllLinks()
+			FragmentListMode.Favorites -> viewModel.streamFavoriteLinks()
 		}
 	}
 
@@ -145,6 +155,22 @@ class LinksListFragment : Fragment() {
 //					}
 //				})
 			show()
+		}
+	}
+
+	companion object {
+		private const val LIST_MODE_KEY = "mode"
+
+		fun newInstanceForList() = LinksListFragment().apply {
+			arguments = bundleOf(
+				LIST_MODE_KEY to FragmentListMode.All
+			)
+		}
+
+		fun newInstanceForFavorites() = LinksListFragment().apply {
+			arguments = bundleOf(
+				LIST_MODE_KEY to FragmentListMode.Favorites
+			)
 		}
 	}
 }

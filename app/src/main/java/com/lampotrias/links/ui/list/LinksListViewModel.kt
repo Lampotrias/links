@@ -3,7 +3,8 @@ package com.lampotrias.links.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.links.domain.cases.DeleteLinkUseCase
-import com.lampotrias.links.domain.cases.GetLinksUseCase
+import com.lampotrias.links.domain.cases.GetAllLinksUseCase
+import com.lampotrias.links.domain.cases.GetFavoritesLinksUseCase
 import com.lampotrias.links.domain.cases.RestoreLinkUseCase
 import com.lampotrias.links.domain.cases.UpdateFavoriteLinkUseCase
 import com.lampotrias.links.domain.model.LinkModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LinksListViewModel @Inject constructor(
-	private val getLinksUseCase: GetLinksUseCase,
+	private val getAllLinksUseCase: GetAllLinksUseCase,
+	private val getFavoritesLinksUseCase: GetFavoritesLinksUseCase,
 	private val deleteLinkUseCase: DeleteLinkUseCase,
 	private val restoreLinkUseCase: RestoreLinkUseCase,
 	private val updateFavoriteLinkUseCase: UpdateFavoriteLinkUseCase,
@@ -26,9 +28,21 @@ class LinksListViewModel @Inject constructor(
 	private val _uiState = MutableStateFlow(LinksListUiState())
 	val uiState = _uiState.asStateFlow()
 
-	init {
+	fun streamAllLinks() {
 		viewModelScope.launch {
-			getLinksUseCase.invoke().collect { links ->
+			getAllLinksUseCase.invoke().collect { links ->
+				_uiState.update {
+					it.copy(
+						links = links
+					)
+				}
+			}
+		}
+	}
+
+	fun streamFavoriteLinks() {
+		viewModelScope.launch {
+			getFavoritesLinksUseCase.invoke().collect { links ->
 				_uiState.update {
 					it.copy(
 						links = links
