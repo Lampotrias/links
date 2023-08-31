@@ -32,26 +32,28 @@ class AddShowLinkFragment : Fragment() {
 	private val binding get() = _binding!!
 
 	init {
-		Timber.w("init")
+		Timber.e("init ${this.id}")
 	}
 
 	@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		Timber.w("onCreate")
+		Timber.e("onCreate ${this.id}")
 	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		Timber.e("onCreateView ${this.id}")
 		_binding = FragmentAddShowLinkBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		Timber.e("onViewCreated ${this.id}")
 
 		val mode = requireArguments().getParcelable(DETAIL_MODE_KEY) ?: FragmentDetailMode.Add
 		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_MODEL_KEY)
@@ -159,6 +161,30 @@ class AddShowLinkFragment : Fragment() {
 				}
 			}
 		}
+	}
+
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+
+		Timber.e("onAttach ${this.id}")
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+
+		Timber.e("onDestroyView ${this.id}")
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		Timber.e("onDestroy ${this.id}")
+	}
+
+	override fun onDetach() {
+		super.onDetach()
+
+		Timber.e("onDetach ${this.id}")
 	}
 
 	companion object {

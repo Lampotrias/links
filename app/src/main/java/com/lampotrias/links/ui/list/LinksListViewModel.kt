@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +28,10 @@ class LinksListViewModel @Inject constructor(
 
 	private val _uiState = MutableStateFlow(LinksListUiState())
 	val uiState = _uiState.asStateFlow()
+
+	init {
+		Timber.e("init")
+	}
 
 	fun streamAllLinks() {
 		viewModelScope.launch {

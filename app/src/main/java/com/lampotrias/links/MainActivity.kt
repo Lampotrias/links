@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 		val ss = LinksListFragment.newInstanceForList()
 		val ww = LinksListFragment.newInstanceForFavorites()
 
+		openFragment(ss, false)
+
 		binding.bottomNavigation.setOnItemSelectedListener { item ->
 			when (item.itemId) {
 				R.id.m_list -> {
@@ -54,8 +56,11 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun openFragment(fragment: Fragment) {
+	private fun openFragment(fragment: Fragment, withAnimation: Boolean = true) {
 		supportFragmentManager.commit {
+			if (withAnimation) {
+				setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+			}
 			replace(R.id.main_fragment_container, fragment)
 			addToBackStack(null)
 		}

@@ -1,5 +1,6 @@
 package com.lampotrias.links.ui.list
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import com.lampotrias.links.ui.qrcode.QRCodeGenerateFragment
 import com.lampotrias.links.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -59,6 +61,10 @@ class LinksListFragment : Fragment() {
 		}
 	})
 
+	init {
+		Timber.e("init $this")
+	}
+
 	private fun navigateToDetail(linkModel: LinkModel) {
 		val addShowLinkFragment = AddShowLinkFragment.newInstanceForDetail(linkModel)
 		parentFragmentManager.commit {
@@ -79,6 +85,7 @@ class LinksListFragment : Fragment() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Timber.e("onCreate $this")
 
 		when(arguments?.getParcelable(LIST_MODE_KEY) ?: FragmentListMode.All) {
 			FragmentListMode.All -> viewModel.streamAllLinks()
@@ -90,12 +97,14 @@ class LinksListFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		Timber.e("onCreateView $this")
 		_binding = FragmentLinksListBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		Timber.e("onViewCreated $this")
 
 		binding.rvLinkList.apply {
 			layoutManager = LinearLayoutManager(context)
@@ -156,6 +165,30 @@ class LinksListFragment : Fragment() {
 //				})
 			show()
 		}
+	}
+
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+
+		Timber.e("onAttach $this")
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+
+		Timber.e("onDestroyView $this")
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		Timber.e("onDestroy $this")
+	}
+
+	override fun onDetach() {
+		super.onDetach()
+
+		Timber.e("onDetach $this")
 	}
 
 	companion object {
