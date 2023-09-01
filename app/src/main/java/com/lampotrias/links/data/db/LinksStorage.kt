@@ -31,8 +31,17 @@ class LinksStorage @Inject constructor(
 		}
 	}
 
-	override fun getLinks(): Flow<List<LinkModel>> {
-		return linksDao.getLinks()
+	override fun getAllLinks(): Flow<List<LinkModel>> {
+		return linksDao.getAllLinks()
+			.map {
+				it.map { linkDatabaseModel ->
+					linkDatabaseModel.asDomainModel()
+				}
+			}
+	}
+
+	override fun getFavoritesLinks(): Flow<List<LinkModel>> {
+		return linksDao.getFavoritesLinks()
 			.map {
 				it.map { linkDatabaseModel ->
 					linkDatabaseModel.asDomainModel()
@@ -43,6 +52,12 @@ class LinksStorage @Inject constructor(
 	override suspend fun updateLink(linkModel: LinkModel) {
 		withContext(dispatcherProvider.io) {
 			linksDao.updateLink(linkModel.asDatabaseModel())
+		}
+	}
+
+	override suspend fun updateFavorite(linkModel: LinkModel) {
+		withContext(dispatcherProvider.io) {
+			linksDao.updateFavorite(linkModel.id)
 		}
 	}
 }

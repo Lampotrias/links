@@ -32,47 +32,49 @@ class AddShowLinkFragment : Fragment() {
 	private val binding get() = _binding!!
 
 	init {
-		Timber.w("init")
+		Timber.e("init ${this.id}")
 	}
 
 	@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		Timber.w("onCreate")
+		Timber.e("onCreate ${this.id}")
 	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		Timber.e("onCreateView ${this.id}")
 		_binding = FragmentAddShowLinkBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		Timber.e("onViewCreated ${this.id}")
 
-		val mode = requireArguments().getParcelable(MODE_KEY) ?: FragmentMode.Add
+		val mode = requireArguments().getParcelable(DETAIL_MODE_KEY) ?: FragmentDetailMode.Add
 		val linkModel = requireArguments().getParcelable<LinkModel>(LINk_MODEL_KEY)
 
-		if (mode == FragmentMode.Add) {
+		if (mode == FragmentDetailMode.Add) {
 			val externalUrl = requireArguments().getString(URL_KEY) ?: ""
 			viewModel.setInitialUrl(externalUrl)
 		}
 
-		if (mode == FragmentMode.Show && linkModel != null) {
+		if (mode == FragmentDetailMode.Show && linkModel != null) {
 			viewModel.setInitialState(linkModel)
 		}
 
 		when(mode) {
-			FragmentMode.Show -> {
+			FragmentDetailMode.Show -> {
 				binding.btnSave.text = "Save"
 				binding.btnSave.visibility = View.INVISIBLE
 				binding.btnInsertFromClipboard.visibility = View.INVISIBLE
 				binding.btnCheckUrl.visibility = View.INVISIBLE
 			}
-			FragmentMode.Add -> {
+			FragmentDetailMode.Add -> {
 				binding.btnSave.text = "Add"
 				binding.btnSave.visibility = View.VISIBLE
 				binding.btnInsertFromClipboard.visibility = View.VISIBLE
@@ -112,7 +114,7 @@ class AddShowLinkFragment : Fragment() {
 						url = url,
 						description = binding.desctiption.text.toString(),
 						title = binding.title.text.toString(),
-						imageUrl = binding.imageUrl.tag?.toString() ?: ""
+						imageUrl = binding.imageUrl.tag?.toString() ?: "",
 					)
 				)
 			} else {
@@ -161,20 +163,44 @@ class AddShowLinkFragment : Fragment() {
 		}
 	}
 
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+
+		Timber.e("onAttach ${this.id}")
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+
+		Timber.e("onDestroyView ${this.id}")
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		Timber.e("onDestroy ${this.id}")
+	}
+
+	override fun onDetach() {
+		super.onDetach()
+
+		Timber.e("onDetach ${this.id}")
+	}
+
 	companion object {
-		private const val MODE_KEY = "mode"
+		private const val DETAIL_MODE_KEY = "mode"
 		private const val URL_KEY = "url"
 		private const val LINk_MODEL_KEY = "link_model_key"
 		fun newInstanceForAdd(url: String = "") = AddShowLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Add,
+				DETAIL_MODE_KEY to FragmentDetailMode.Add,
 				URL_KEY to url
 			)
 		}
 
 		fun newInstanceForDetail(linkModel: LinkModel) = AddShowLinkFragment().apply {
 			arguments = bundleOf(
-				MODE_KEY to FragmentMode.Show,
+				DETAIL_MODE_KEY to FragmentDetailMode.Show,
 				LINk_MODEL_KEY to linkModel
 			)
 		}

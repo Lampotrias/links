@@ -11,6 +11,7 @@ class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewH
 		binding.title.text = linkModel.title.ifEmpty { linkModel.url }
 		binding.desctiption.text = linkModel.description
 		binding.imageUrl.setImageURI(linkModel.imageUrl)
+		binding.favoriteIcon.setImageResource(if (linkModel.isFavorite) R.drawable.baseline_star_on else R.drawable.baseline_star_off)
 
 		binding.detail.setOnClickListener {
 			listener.onDetail(linkModel)

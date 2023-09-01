@@ -1,11 +1,12 @@
 package com.lampotrias.links.ui.list
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -26,6 +27,7 @@ import com.lampotrias.links.ui.qrcode.QRCodeGenerateFragment
 import com.lampotrias.links.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -55,9 +57,13 @@ class LinksListFragment : Fragment() {
 		}
 
 		override fun onFavorite(linkModel: LinkModel) {
-			Toast.makeText(requireContext(), "Not supporting now", Toast.LENGTH_SHORT).show()
+			viewModel.updateFavorite(linkModel)
 		}
 	})
+
+	init {
+		Timber.e("init $this")
+	}
 
 	private fun navigateToDetail(linkModel: LinkModel) {
 		val addShowLinkFragment = AddShowLinkFragment.newInstanceForDetail(linkModel)
@@ -77,16 +83,28 @@ class LinksListFragment : Fragment() {
 		}
 	}
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		Timber.e("onCreate $this")
+
+		when(arguments?.getParcelable(LIST_MODE_KEY) ?: FragmentListMode.All) {
+			FragmentListMode.All -> viewModel.streamAllLinks()
+			FragmentListMode.Favorites -> viewModel.streamFavoriteLinks()
+		}
+	}
+
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		Timber.e("onCreateView $this")
 		_binding = FragmentLinksListBinding.inflate(inflater, container, false)
 		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		Timber.e("onViewCreated $this")
 
 		binding.rvLinkList.apply {
 			layoutManager = LinearLayoutManager(context)
@@ -146,6 +164,46 @@ class LinksListFragment : Fragment() {
 //					}
 //				})
 			show()
+		}
+	}
+
+	override fun onAttach(context: Context) {
+		super.onAttach(context)
+
+		Timber.e("onAttach $this")
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+
+		Timber.e("onDestroyView $this")
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		Timber.e("onDestroy $this")
+	}
+
+	override fun onDetach() {
+		super.onDetach()
+
+		Timber.e("onDetach $this")
+	}
+
+	companion object {
+		private const val LIST_MODE_KEY = "mode"
+
+		fun newInstanceForList() = LinksListFragment().apply {
+			arguments = bundleOf(
+				LIST_MODE_KEY to FragmentListMode.All
+			)
+		}
+
+		fun newInstanceForFavorites() = LinksListFragment().apply {
+			arguments = bundleOf(
+				LIST_MODE_KEY to FragmentListMode.Favorites
+			)
 		}
 	}
 }

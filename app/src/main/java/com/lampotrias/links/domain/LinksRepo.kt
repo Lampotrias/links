@@ -7,6 +7,8 @@ interface LinksRepo {
 	suspend fun addLink(linkModel: LinkModel): Long
 	suspend fun deleteLink(linkModel: LinkModel)
 	suspend fun restoreLink(linkModel: LinkModel)
-	fun getLinks(): Flow<List<LinkModel>>
+	fun getAllLinks(): Flow<List<LinkModel>>
+	fun getFavoritesLinks(): Flow<List<LinkModel>>
 	suspend fun updateLink(linkModel: LinkModel)
+	suspend fun updateFavorite(linkModel: LinkModel)
 }

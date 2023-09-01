@@ -41,10 +41,18 @@ class AddLinkUseCaseTest {
 			}
 		}
 
-		override fun getLinks(): Flow<List<LinkModel>> {
+		override suspend fun restoreLink(linkModel: LinkModel) {
+			TODO("Not yet implemented")
+		}
+
+		override fun getAllLinks(): Flow<List<LinkModel>> {
 			return flow {
 				emit(links)
 			}
+		}
+
+		override fun getFavoritesLinks(): Flow<List<LinkModel>> {
+			TODO("Not yet implemented")
 		}
 
 		override suspend fun updateLink(linkModel: LinkModel) {
@@ -53,6 +61,10 @@ class AddLinkUseCaseTest {
 			}
 			links.add(linkModel)
 		}
+
+		override suspend fun updateFavorite(linkModel: LinkModel) {
+			TODO("Not yet implemented")
+		}
 	}
 
 	@Test
@@ -60,13 +72,13 @@ class AddLinkUseCaseTest {
 		runBlocking {
 			linksRepo.addLink(link1)
 
-			linksRepo.getLinks().collect {
+			linksRepo.getAllLinks().collect {
 				assertThat(it.size).isEqualTo(1)
 			}
 
 			linksRepo.addLink(link2)
 
-			linksRepo.getLinks().collect {
+			linksRepo.getAllLinks().collect {
 				assertThat(it.size).isEqualTo(2)
 			}
 		}

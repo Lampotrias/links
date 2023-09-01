@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/m_list"
+        android:enabled="true"
+        android:icon="@drawable/baseline_list_24"
+        android:title="List" />
+    <item
+        android:id="@+id/m_favorites"
+        android:enabled="true"
+        android:icon="@drawable/baseline_star_off"
+        android:title="Favorites" />
+    <item
+        android:id="@+id/m_settings"
+        android:enabled="true"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Settings" />
+</menu>

@@ -13,6 +13,7 @@ data class LinkModel(
 	val description: String,
 	val url: String,
 	val imageUrl: String,
+	val isFavorite: Boolean = false,
 ) : Parcelable
 
 fun LinkModel.asDatabaseModel(): LinkDatabaseModel {
