@@ -62,7 +62,7 @@ class LinksListFragment : Fragment() {
 	})
 
 	init {
-		Timber.e("init $this")
+		Timber.e("init $this, tag: $tag")
 	}
 
 	private fun navigateToDetail(linkModel: LinkModel) {

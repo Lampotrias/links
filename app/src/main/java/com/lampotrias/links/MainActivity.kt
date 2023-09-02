@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
@@ -12,73 +13,67 @@ import androidx.work.WorkManager
 import com.lampotrias.links.data.workmanager.MetadataCreateWorker
 import com.lampotrias.links.databinding.ActivityMainBinding
 import com.lampotrias.links.ui.list.LinksListFragment
+import com.lampotrias.links.ui.settings.SettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-	private lateinit var binding: ActivityMainBinding
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-		binding = ActivityMainBinding.inflate(layoutInflater)
-		val view = binding.root
-		setContentView(view)
+        Timber.e("onCreate $this")
 
-		performIntent(intent)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-		val ss = LinksListFragment.newInstanceForList()
-		val ww = LinksListFragment.newInstanceForFavorites()
+        performIntent(intent)
 
-		openFragment(ss, false)
+        if (savedInstanceState == null) {
+			switchFragment(NavigationPosition.List)
+        }
 
-		binding.bottomNavigation.setOnItemSelectedListener { item ->
-			when (item.itemId) {
-				R.id.m_list -> {
-					openFragment(ss)
-					true
-				}
+        binding.bottomNavigation.menu.getItem(0).isChecked = true
 
-				R.id.m_favorites -> {
-					openFragment(ww)
-					true
-				}
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.m_list -> {
+					switchFragment(NavigationPosition.List)
+                    true
+                }
 
-				R.id.m_settings -> {
-					// Respond to navigation item 2 click
-					true
-				}
+                R.id.m_favorites -> {
+					switchFragment(NavigationPosition.Favorites)
+                    true
+                }
 
-				else -> {
-					true
-				}
-			}
-		}
-	}
+                R.id.m_settings -> {
+                    switchFragment(NavigationPosition.Settings)
+                    true
+                }
 
-	private fun openFragment(fragment: Fragment, withAnimation: Boolean = true) {
-		supportFragmentManager.commit {
-			if (withAnimation) {
-				setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-			}
-			replace(R.id.main_fragment_container, fragment)
-			addToBackStack(null)
-		}
-	}
+                else -> {
+                    true
+                }
+            }
+        }
+    }
 
-	override fun onNewIntent(intent: Intent?) {
-		super.onNewIntent(intent)
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
 
-		performIntent(intent)
-	}
+        performIntent(intent)
+    }
 
-	private fun performIntent(intent: Intent?) {
-		if (intent?.action == Intent.ACTION_SEND) {
+    private fun performIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_SEND) {
 
-			supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
-			val url = intent.getStringExtra(Intent.EXTRA_TEXT)
+            supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
+            val url = intent.getStringExtra(Intent.EXTRA_TEXT)
 
-			if (url?.startsWith("http") == true) {
+            if (url?.startsWith("http") == true) {
 //				val addEditLinkFragment = AddEditLinkFragment.newInstanceForAdd(url)
 //				supportFragmentManager.commit {
 //					setReorderingAllowed(true)
@@ -86,19 +81,59 @@ class MainActivity : AppCompatActivity() {
 //					addToBackStack(null)
 //				}
 
-				val builder = Data.Builder()
-					.putString(MetadataCreateWorker.URL_KEY, url)
-					.build()
+                val builder = Data.Builder()
+                    .putString(MetadataCreateWorker.URL_KEY, url)
+                    .build()
 
-				val worker = OneTimeWorkRequestBuilder<MetadataCreateWorker>()
-					.setInputData(builder)
-					.build()
+                val worker = OneTimeWorkRequestBuilder<MetadataCreateWorker>()
+                    .setInputData(builder)
+                    .build()
 
 
-				WorkManager.getInstance(this)
-					.enqueue(worker)
+                WorkManager.getInstance(this)
+                    .enqueue(worker)
 
-			}
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Timber.e("onDestroy $this")
+    }
+
+	private fun switchFragment(navigationPosition: NavigationPosition): Boolean {
+		val targetFragment = findOrCreateFragment(navigationPosition)
+		if (targetFragment.isAdded) {
+			return false
 		}
+
+		supportFragmentManager.commit {
+			// Detach a fragment
+			supportFragmentManager.findFragmentById(R.id.main_fragment_container)?.also {
+				detach(it)
+			}
+			// Attach or add a fragment
+			if (targetFragment.isDetached) {
+				attach(targetFragment)
+			} else {
+				add(R.id.main_fragment_container, targetFragment, navigationPosition.tag)
+			}
+			// Set the animation for this transaction
+			setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+		}
+		// Immediately execute transactions
+		return supportFragmentManager.executePendingTransactions()
 	}
+
+    private fun findOrCreateFragment(navigationPosition: NavigationPosition): Fragment {
+        return supportFragmentManager.findFragmentByTag(navigationPosition.tag) ?: run {
+            when (navigationPosition) {
+                NavigationPosition.Favorites -> LinksListFragment.newInstanceForFavorites()
+                NavigationPosition.List -> LinksListFragment.newInstanceForList()
+                NavigationPosition.Settings -> SettingsFragment.newInstance()
+            }
+        }
+    }
 }
