@@ -30,10 +30,11 @@ class LinksListViewModel @Inject constructor(
 	val uiState = _uiState.asStateFlow()
 
 	init {
-		Timber.e("init")
+		Timber.e("init $this")
 	}
 
 	fun streamAllLinks() {
+		Timber.e("streamAllLinks $this")
 		viewModelScope.launch {
 			getAllLinksUseCase.invoke().collect { links ->
 				_uiState.update {
@@ -46,6 +47,7 @@ class LinksListViewModel @Inject constructor(
 	}
 
 	fun streamFavoriteLinks() {
+		Timber.e("streamFavoriteLinks $this")
 		viewModelScope.launch {
 			getFavoritesLinksUseCase.invoke().collect { links ->
 				_uiState.update {
