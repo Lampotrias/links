@@ -13,6 +13,7 @@ import androidx.work.WorkManager
 import com.lampotrias.links.data.workmanager.MetadataCreateWorker
 import com.lampotrias.links.databinding.ActivityMainBinding
 import com.lampotrias.links.ui.list.LinksListFragment
+import com.lampotrias.links.ui.settings.SettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.m_settings -> {
-
+                    switchFragment(NavigationPosition.Settings)
                     true
                 }
 
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity() {
             when (navigationPosition) {
                 NavigationPosition.Favorites -> LinksListFragment.newInstanceForFavorites()
                 NavigationPosition.List -> LinksListFragment.newInstanceForList()
-                NavigationPosition.Settings -> LinksListFragment.newInstanceForFavorites()
+                NavigationPosition.Settings -> SettingsFragment.newInstance()
             }
         }
     }
