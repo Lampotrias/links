@@ -107,7 +107,7 @@ class AddShowLinkFragment : Fragment() {
 		}
 
 		binding.btnSave.setOnClickListener {
-			val url = binding.url.editText?.toString()
+			val url = binding.url.editText?.text?.toString()
 			if (!url.isNullOrEmpty()) {
 				viewModel.addLink(
 					LinkModel(
