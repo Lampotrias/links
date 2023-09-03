@@ -5,7 +5,7 @@ import com.lampotrias.links.data.export.type.JsonConverter
 
 
 object OutputExporterFactory {
-	fun GetExportOutputType(exportOutputType: ExportOutputType): IOutputExporter {
+	fun getExportOutputType(exportOutputType: ExportOutputType): IOutputExporter {
 		return when (exportOutputType) {
 			ExportJson -> JsonConverter()
 			is ExportCsv -> CsvConverter()
