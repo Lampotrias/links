@@ -34,4 +34,22 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/export_json"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Export json"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/export_csv"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/export_csv"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Export csv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/export_json" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

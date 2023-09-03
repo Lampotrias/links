@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
@@ -17,8 +18,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.links.databinding.FragmentSettingsBinding
+import com.lampotrias.links.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 @AndroidEntryPoint
@@ -41,7 +44,18 @@ class SettingsFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		binding.exportCsv.setOnClickListener {
+			viewModel.exportCsv()
+		}
 
+		binding.exportJson.setOnClickListener {
+			viewModel.exportJson()
+		}
+
+		subscribeEvents()
+	}
+
+	private fun subscribeEvents() {
 		viewLifecycleOwner.lifecycleScope.launch {
 			viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				val storedTheme = viewModel.getCurrentColorTheme().ordinal
@@ -75,6 +89,39 @@ class SettingsFragment : Fragment() {
 				}
 			}
 		}
+
+		viewLifecycleOwner.lifecycleScope.launch {
+			viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+				viewModel.uiState.collect { state ->
+
+					state.successJson?.getContentIfNotHandled()?.let { file ->
+						sendFile(file)
+					}
+
+					state.successCsv?.getContentIfNotHandled()?.let { file ->
+						sendFile(file)
+					}
+
+					state.errorCsv?.getContentIfNotHandled()?.let {
+						showError("Error export csv")
+					}
+
+					state.errorJson?.getContentIfNotHandled()?.let {
+						showError("Error export json")
+					}
+				}
+			}
+		}
+	}
+
+	private fun sendFile(file: File) {
+		activity?.let {
+			Utils.systemSendFile(it, file)
+		}
+	}
+
+	private fun showError(message: String) {
+		Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 	}
 
 	private fun applyTheme(selectedTheme: AppThemeColor) {
