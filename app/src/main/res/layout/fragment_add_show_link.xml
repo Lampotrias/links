@@ -87,11 +87,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/folder_name"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_url"
         tools:text="sdadasdasdasdad asdsadsaasda sdasdasd asdasdasd asdas" />
+
+    <TextView
+        android:id="@+id/folder_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/desctiption"
+        tools:text="folder: xxxx" />
 
     <Button
         android:id="@+id/btn_save"

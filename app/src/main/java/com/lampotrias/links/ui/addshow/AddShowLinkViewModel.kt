@@ -3,6 +3,7 @@ package com.lampotrias.links.ui.addshow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lampotrias.links.domain.cases.AddLinkUseCase
+import com.lampotrias.links.domain.cases.GetFoldersUseCase
 import com.lampotrias.links.domain.cases.GetLinkMetadataUseCase
 import com.lampotrias.links.domain.model.LinkModel
 import com.lampotrias.links.domain.model.LinkSaveModel
@@ -10,6 +11,7 @@ import com.lampotrias.links.utils.OneShotEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,12 +19,22 @@ import javax.inject.Inject
 @HiltViewModel
 class AddShowLinkViewModel @Inject constructor(
 	private val addLinkUseCase: AddLinkUseCase,
-//	private val edUseCase: AddLinkUseCase,
+	private val getFoldersUseCase: GetFoldersUseCase,
 	private val getLinkMetadataUseCase: GetLinkMetadataUseCase,
 ) : ViewModel() {
 
 	private val _uiState = MutableStateFlow(AddShodUiState())
 	val uiState = _uiState.asStateFlow()
+
+	init {
+		viewModelScope.launch {
+			_uiState.update {
+				it.copy(
+					folderModel = getFoldersUseCase.invoke().firstOrNull()?.firstOrNull()
+				)
+			}
+		}
+	}
 
 	fun setInitialState(linkModel: LinkModel) {
 		_uiState.update {
