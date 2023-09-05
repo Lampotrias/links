@@ -1,8 +1,11 @@
-package com.lampotrias.links.data.db
+package com.lampotrias.links.data
 
+import com.lampotrias.links.data.db.asDomainModel
+import com.lampotrias.links.data.db.link.LinksDao
 import com.lampotrias.links.di.DispatcherProvider
 import com.lampotrias.links.domain.LinksRepo
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.domain.model.LinkSaveModel
 import com.lampotrias.links.domain.model.asDatabaseModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -13,9 +16,9 @@ class LinksStorage @Inject constructor(
 	private val linksDao: LinksDao,
 	private val dispatcherProvider: DispatcherProvider,
 ) : LinksRepo {
-	override suspend fun addLink(linkModel: LinkModel): Long {
+	override suspend fun addLink(linkSaveModel: LinkSaveModel): Long {
 		return withContext(dispatcherProvider.io) {
-			return@withContext linksDao.addLink(linkModel.asDatabaseModel())
+			return@withContext linksDao.addLink(linkSaveModel.asDatabaseModel())
 		}
 	}
 

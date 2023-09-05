@@ -1,8 +1,11 @@
 package com.lampotrias.links.di
 
+import com.lampotrias.links.data.FolderStorageImpl
 import com.lampotrias.links.data.LinkMetadataRepoRepoImpl
-import com.lampotrias.links.data.db.LinksDao
-import com.lampotrias.links.data.db.LinksStorage
+import com.lampotrias.links.data.db.link.LinksDao
+import com.lampotrias.links.data.LinksStorage
+import com.lampotrias.links.data.db.folder.FoldersDao
+import com.lampotrias.links.domain.FolderStorage
 import com.lampotrias.links.domain.LinkMetadataRepo
 import com.lampotrias.links.domain.LinksRepo
 import dagger.Module
@@ -25,5 +28,13 @@ object RepositoryModules {
 		dispatcherProvider: DispatcherProvider,
 	): LinksRepo {
 		return LinksStorage(linksDao, dispatcherProvider)
+	}
+
+	@Provides
+	fun provideFolderStorage(
+		foldersDao: FoldersDao,
+		dispatcherProvider: DispatcherProvider,
+	): FolderStorage {
+		return FolderStorageImpl(foldersDao, dispatcherProvider)
 	}
 }

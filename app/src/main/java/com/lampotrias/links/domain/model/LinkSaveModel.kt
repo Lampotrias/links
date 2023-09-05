@@ -1,31 +1,26 @@
 package com.lampotrias.links.domain.model
 
-import android.os.Parcelable
 import com.lampotrias.links.data.db.link.LinkDatabaseModel
-import kotlinx.parcelize.Parcelize
 
-
-@Parcelize
-data class LinkModel(
+data class LinkSaveModel(
 	val id: Long = 0,
 	val dateCreate: Long = System.currentTimeMillis(),
 	val title: String,
 	val description: String,
 	val url: String,
 	val folderId: Long,
-	val folderName: String,
 	val imageUrl: String,
-	val isFavorite: Boolean = false,
-) : Parcelable
+	val isFavorite: Boolean = false
+)
 
-fun LinkModel.asDatabaseModel(): LinkDatabaseModel {
+fun LinkSaveModel.asDatabaseModel(): LinkDatabaseModel {
 	return LinkDatabaseModel(
 		id = id,
 		dateCreate = dateCreate,
 		title = title,
 		description = description,
 		url = url,
-		imageUrl = imageUrl,
 		folderId = folderId,
+		imageUrl = imageUrl
 	)
 }

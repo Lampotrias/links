@@ -1,38 +1,42 @@
 package com.lampotrias.links.domain.cases
 
 import com.google.common.truth.Truth.assertThat
+import com.lampotrias.links.data.db.link.LinkDatabaseModel
 import com.lampotrias.links.domain.LinksRepo
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.domain.model.LinkSaveModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class AddLinkUseCaseTest {
-	private val link1 = LinkModel(
+	private val link1 = LinkSaveModel(
 		id = 1,
 		dateCreate = System.currentTimeMillis(),
 		title = "title1",
 		description = "description1",
 		url = "url1",
-		imageUrl = "imageUrl1"
+		imageUrl = "imageUrl1",
+		folderId = 1,
 	)
 
-	private val link2 = LinkModel(
+	private val link2 = LinkSaveModel(
 		id = 2,
 		dateCreate = System.currentTimeMillis(),
 		title = "title2",
 		description = "description2",
 		url = "url2",
-		imageUrl = "imageUrl2"
+		imageUrl = "imageUrl2",
+		folderId = 1,
 	)
 
 	private val linksRepo = object : LinksRepo {
-		private val links = mutableListOf<LinkModel>()
-		override suspend fun addLink(linkModel: LinkModel): Long {
-			links.add(linkModel)
+		private val links = mutableListOf<LinkSaveModel>()
+		override suspend fun addLink(linkSaveModel: LinkSaveModel): Long {
+			links.add(linkSaveModel)
 
-			return linkModel.id
+			return linkSaveModel.id
 		}
 
 		override suspend fun deleteLink(linkModel: LinkModel) {
@@ -47,7 +51,7 @@ class AddLinkUseCaseTest {
 
 		override fun getAllLinks(): Flow<List<LinkModel>> {
 			return flow {
-				emit(links)
+//				emit(links)
 			}
 		}
 
@@ -59,7 +63,7 @@ class AddLinkUseCaseTest {
 			links.removeIf {
 				it.id == linkModel.id
 			}
-			links.add(linkModel)
+//			links.add(linkModel)
 		}
 
 		override suspend fun updateFavorite(linkModel: LinkModel) {

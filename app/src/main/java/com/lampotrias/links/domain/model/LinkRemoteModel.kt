@@ -6,15 +6,3 @@ data class LinkRemoteModel(
 	val url: String,
 	val imageUrl: String,
 )
-
-fun LinkRemoteModel.asDomainModel(): LinkModel {
-	return LinkModel(
-		id = 0L,
-		title = title,
-		description = description,
-		imageUrl = imageUrl,
-		dateCreate = System.currentTimeMillis(),
-		url = url,
-		isFavorite = false,
-	)
-}

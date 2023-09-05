@@ -16,7 +16,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.links.databinding.FragmentAddShowLinkBinding
+import com.lampotrias.links.domain.model.FolderModel
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.domain.model.LinkSaveModel
 import com.lampotrias.links.utils.Utils
 import com.lampotrias.links.utils.ext.getPlainText
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +32,8 @@ class AddShowLinkFragment : Fragment() {
 
 	private var _binding: FragmentAddShowLinkBinding? = null
 	private val binding get() = _binding!!
+
+	private var currentFolder: FolderModel? = null
 
 	init {
 		Timber.e("init ${this.id}")
@@ -67,13 +71,14 @@ class AddShowLinkFragment : Fragment() {
 			viewModel.setInitialState(linkModel)
 		}
 
-		when(mode) {
+		when (mode) {
 			FragmentDetailMode.Show -> {
 				binding.btnSave.text = "Save"
 				binding.btnSave.visibility = View.INVISIBLE
 				binding.btnInsertFromClipboard.visibility = View.INVISIBLE
 				binding.btnCheckUrl.visibility = View.INVISIBLE
 			}
+
 			FragmentDetailMode.Add -> {
 				binding.btnSave.text = "Add"
 				binding.btnSave.visibility = View.VISIBLE
@@ -91,7 +96,8 @@ class AddShowLinkFragment : Fragment() {
 		}
 
 		binding.btnInsertFromClipboard.setOnClickListener {
-			val text = (activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
+			val text =
+				(activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
 			if (!text.isNullOrEmpty()) {
 				binding.url.editText?.setText(text)
 			}
@@ -109,20 +115,21 @@ class AddShowLinkFragment : Fragment() {
 		binding.btnSave.setOnClickListener {
 			val url = binding.url.editText?.text?.toString()
 			if (!url.isNullOrEmpty()) {
-				viewModel.addLink(
-					LinkModel(
-						url = url,
-						description = binding.desctiption.text.toString(),
-						title = binding.title.text.toString(),
-						imageUrl = binding.imageUrl.tag?.toString() ?: "",
+				currentFolder?.let { folder ->
+					viewModel.addLink(
+						LinkSaveModel(
+							url = url,
+							description = binding.desctiption.text.toString(),
+							title = binding.title.text.toString(),
+							imageUrl = binding.imageUrl.tag?.toString() ?: "",
+							folderId = folder.id,
+						)
 					)
-				)
+				} ?: run {
+					Toast.makeText(requireContext(), "folder is null", Toast.LENGTH_SHORT).show()
+				}
 			} else {
-				Toast.makeText(
-					requireContext(),
-					"Empty url",
-					Toast.LENGTH_SHORT
-				).show()
+				Toast.makeText(requireContext(), "Empty url", Toast.LENGTH_SHORT).show()
 			}
 		}
 
@@ -138,10 +145,14 @@ class AddShowLinkFragment : Fragment() {
 
 					binding.title.text = state.titleLink
 					binding.desctiption.text = state.descriptionLink
+
 					with(binding.imageUrl) {
 						setImageURI(state.imageUrlLink)
 						tag = state.imageUrlLink
 					}
+
+					currentFolder = state.folderModel
+					binding.folderName.text = "folder: ${state.folderModel?.name}" ?: ""
 
 					state.error?.getContentIfNotHandled()?.let {
 						Toast.makeText(

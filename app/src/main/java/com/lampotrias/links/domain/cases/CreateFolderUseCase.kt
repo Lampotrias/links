@@ -1,19 +1,19 @@
 package com.lampotrias.links.domain.cases
 
 import com.lampotrias.links.di.DispatcherProvider
-import com.lampotrias.links.domain.LinksRepo
-import com.lampotrias.links.domain.model.LinkSaveModel
+import com.lampotrias.links.domain.FolderStorage
+import com.lampotrias.links.domain.model.FolderModel
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AddLinkUseCase @Inject constructor(
-	private val repo: LinksRepo,
+class CreateFolderUseCase @Inject constructor(
+	private val folderStorage: FolderStorage,
 	private val dispatcherProvider: DispatcherProvider,
 ) {
-	suspend operator fun invoke(linkSaveModel: LinkSaveModel): Result<Long> {
+	suspend operator fun invoke(folderModel: FolderModel): Result<Long> {
 		return withContext(dispatcherProvider.io) {
 			return@withContext try {
-				val id = repo.addLink(linkSaveModel)
+				val id = folderStorage.createFolder(folderModel)
 				Result.success(id)
 			} catch (ex: Exception) {
 				ex.printStackTrace()
