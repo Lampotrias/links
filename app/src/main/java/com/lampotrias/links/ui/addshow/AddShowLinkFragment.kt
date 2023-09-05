@@ -115,6 +115,7 @@ class AddShowLinkFragment : Fragment() {
 						description = binding.desctiption.text.toString(),
 						title = binding.title.text.toString(),
 						imageUrl = binding.imageUrl.tag?.toString() ?: "",
+						folderId = 1,
 					)
 				)
 			} else {

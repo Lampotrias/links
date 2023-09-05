@@ -12,6 +12,7 @@ data class LinkModel(
 	val title: String,
 	val description: String,
 	val url: String,
+	val folderId: Long,
 	val imageUrl: String,
 	val isFavorite: Boolean = false,
 ) : Parcelable
@@ -23,6 +24,7 @@ fun LinkModel.asDatabaseModel(): LinkDatabaseModel {
 		title = title,
 		description = description,
 		url = url,
-		imageUrl = imageUrl
+		imageUrl = imageUrl,
+		folderId = folderId,
 	)
 }

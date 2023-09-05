@@ -1,5 +1,6 @@
 package com.lampotrias.links.data.db.link
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.lampotrias.links.domain.model.LinkModel
@@ -11,6 +12,8 @@ data class LinkDatabaseModel(
 	val title: String,
 	val description: String,
 	val url: String,
+	@ColumnInfo(name = "folder_id")
+	val folderId: Long,
 	val imageUrl: String,
 	val markDeleted: Boolean = false,
 	val isFavorite: Boolean = false,
@@ -25,5 +28,6 @@ fun LinkDatabaseModel.asDomainModel(): LinkModel {
 		url = url,
 		imageUrl = imageUrl,
 		isFavorite = isFavorite,
+		folderId = folderId,
 	)
 }

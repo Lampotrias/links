@@ -16,5 +16,6 @@ fun LinkRemoteModel.asDomainModel(): LinkModel {
 		dateCreate = System.currentTimeMillis(),
 		url = url,
 		isFavorite = false,
+		folderId = 1, // TODO FIX IT
 	)
 }
