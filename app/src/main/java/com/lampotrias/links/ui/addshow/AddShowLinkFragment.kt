@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.lampotrias.links.databinding.FragmentAddShowLinkBinding
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.domain.model.LinkSaveModel
 import com.lampotrias.links.utils.Utils
 import com.lampotrias.links.utils.ext.getPlainText
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +68,7 @@ class AddShowLinkFragment : Fragment() {
 			viewModel.setInitialState(linkModel)
 		}
 
-		when(mode) {
+		when (mode) {
 			FragmentDetailMode.Show -> {
 				binding.btnSave.text = "Save"
 				binding.btnSave.visibility = View.INVISIBLE
@@ -91,7 +92,8 @@ class AddShowLinkFragment : Fragment() {
 		}
 
 		binding.btnInsertFromClipboard.setOnClickListener {
-			val text = (activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
+			val text =
+				(activity?.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.getPlainText()
 			if (!text.isNullOrEmpty()) {
 				binding.url.editText?.setText(text)
 			}
@@ -110,7 +112,7 @@ class AddShowLinkFragment : Fragment() {
 			val url = binding.url.editText?.text?.toString()
 			if (!url.isNullOrEmpty()) {
 				viewModel.addLink(
-					LinkModel(
+					LinkSaveModel(
 						url = url,
 						description = binding.desctiption.text.toString(),
 						title = binding.title.text.toString(),

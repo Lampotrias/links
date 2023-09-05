@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lampotrias.links.domain.cases.AddLinkUseCase
 import com.lampotrias.links.domain.cases.GetLinkMetadataUseCase
 import com.lampotrias.links.domain.model.LinkModel
+import com.lampotrias.links.domain.model.LinkSaveModel
 import com.lampotrias.links.utils.OneShotEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,9 +78,9 @@ class AddShowLinkViewModel @Inject constructor(
 		}
 	}
 
-	fun addLink(linkModel: LinkModel) {
+	fun addLink(linkSaveModel: LinkSaveModel) {
 		viewModelScope.launch {
-			addLinkUseCase.invoke(linkModel).fold(
+			addLinkUseCase.invoke(linkSaveModel).fold(
 				{ newId ->
 					_uiState.update {
 						it.copy(

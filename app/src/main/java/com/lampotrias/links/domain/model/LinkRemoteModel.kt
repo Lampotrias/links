@@ -7,8 +7,8 @@ data class LinkRemoteModel(
 	val imageUrl: String,
 )
 
-fun LinkRemoteModel.asDomainModel(): LinkModel {
-	return LinkModel(
+fun LinkRemoteModel.asSaveModel(): LinkSaveModel {
+	return LinkSaveModel(
 		id = 0L,
 		title = title,
 		description = description,

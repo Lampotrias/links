@@ -7,7 +7,7 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.lampotrias.links.domain.cases.AddLinkUseCase
 import com.lampotrias.links.domain.cases.GetLinkMetadataUseCase
-import com.lampotrias.links.domain.model.asDomainModel
+import com.lampotrias.links.domain.model.asSaveModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
@@ -38,7 +38,7 @@ class MetadataCreateWorker @AssistedInject constructor(
 			val linkMetadata = getLinkMetadataUseCase.invoke(url)
 			Timber.w("start doWork, response: ${linkMetadata.isSuccess}")
 			linkMetadata.getOrNull()?.let {
-				addLinkUseCase.invoke(it.asDomainModel())
+				addLinkUseCase.invoke(it.asSaveModel())
 			}
 		}
 		delay(20_000)
