@@ -25,6 +25,8 @@ class LinkViewHolder(private val binding: LinkItemVhBinding): RecyclerView.ViewH
 			listener.onQrCode(linkModel)
 		}
 
+		binding.folderName.text = "folder: ${linkModel.folderName}"
+
 		binding.moreContainer.setOnClickListener {
 			val popupMenu = PopupMenu(binding.root.context, binding.moreIcon)
 			popupMenu.inflate(R.menu.more_link_menu)
