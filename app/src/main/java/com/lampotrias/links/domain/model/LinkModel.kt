@@ -1,7 +1,7 @@
 package com.lampotrias.links.domain.model
 
 import android.os.Parcelable
-import com.lampotrias.links.data.db.LinkDatabaseModel
+import com.lampotrias.links.data.db.link.LinkDatabaseModel
 import kotlinx.parcelize.Parcelize
 
 

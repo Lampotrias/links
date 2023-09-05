@@ -1,5 +1,7 @@
-package com.lampotrias.links.data.db
+package com.lampotrias.links.data
 
+import com.lampotrias.links.data.db.link.LinksDao
+import com.lampotrias.links.data.db.link.asDomainModel
 import com.lampotrias.links.di.DispatcherProvider
 import com.lampotrias.links.domain.LinksRepo
 import com.lampotrias.links.domain.model.LinkModel

@@ -1,4 +1,4 @@
-package com.lampotrias.links.data.db
+package com.lampotrias.links.data.db.link
 
 import androidx.room.Dao
 import androidx.room.Query

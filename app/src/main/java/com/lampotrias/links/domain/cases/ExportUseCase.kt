@@ -1,7 +1,7 @@
 package com.lampotrias.links.domain.cases
 
 import android.content.Context
-import com.lampotrias.links.data.db.LinksStorage
+import com.lampotrias.links.data.LinksStorage
 import com.lampotrias.links.data.export.ExportCsv
 import com.lampotrias.links.data.export.ExportJson
 import com.lampotrias.links.data.export.ExportOutputType

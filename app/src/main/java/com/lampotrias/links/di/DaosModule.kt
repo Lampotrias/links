@@ -1,7 +1,8 @@
 package com.lampotrias.links.di
 
-import com.lampotrias.links.data.db.LinksDao
+import com.lampotrias.links.data.db.link.LinksDao
 import com.lampotrias.links.data.db.LinksDatabase
+import com.lampotrias.links.data.db.folder.FoldersDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +12,12 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DaosModule {
 	@Provides
-	fun providesEpisodesDao(database: LinksDatabase): LinksDao {
+	fun providesLinksDao(database: LinksDatabase): LinksDao {
 		return database.linksDao()
+	}
+
+	@Provides
+	fun providesFoldersDao(database: LinksDatabase): FoldersDao {
+		return database.foldersDao()
 	}
 }

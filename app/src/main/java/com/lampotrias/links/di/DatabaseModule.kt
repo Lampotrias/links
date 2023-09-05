@@ -22,6 +22,7 @@ object DatabaseModule {
 		return Room.databaseBuilder(context, LinksDatabase::class.java, "links-database")
 			.addMigrations(MIGRATION_1_2)
 			.addMigrations(MIGRATION_2_3)
+			.addMigrations(MIGRATION_3_4)
 			.fallbackToDestructiveMigration()
 			.build()
 	}
@@ -39,6 +40,22 @@ object DatabaseModule {
 				database.execSQL("SELECT `isFavorite` FROM `links` LIMIT 1")
 			} catch (ex: SQLException) {
 				database.execSQL("ALTER TABLE `links` ADD COLUMN `isFavorite` BOOLEAN NOT NULL DEFAULT 0")
+			}
+		}
+	}
+
+	private val MIGRATION_3_4 = object : Migration(3, 4) {
+		override fun migrate(database: SupportSQLiteDatabase) {
+			try {
+				database.execSQL("SELECT * FROM `folders` LIMIT 1")
+			} catch (ex: SQLException) {
+				database.execSQL("CREATE TABLE `folders` (`id` INTEGER PRIMARY KEY `name` TEXT NOT NULL)")
+			}
+
+			try {
+				database.execSQL("SELECT `folder_id` FROM `links` LIMIT 1")
+			} catch (ex: SQLException) {
+				database.execSQL("ALTER TABLE `links` ADD COLUMN `folder_id` INTEGER NOT NULL")
 			}
 		}
 	}
