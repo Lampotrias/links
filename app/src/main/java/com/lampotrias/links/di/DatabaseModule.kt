@@ -3,6 +3,7 @@ package com.lampotrias.links.di
 import android.content.Context
 import android.database.SQLException
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lampotrias.links.data.db.LinksDatabase
@@ -24,6 +25,23 @@ object DatabaseModule {
 			.addMigrations(MIGRATION_2_3)
 			.addMigrations(MIGRATION_3_4)
 			.fallbackToDestructiveMigration()
+			.addCallback(object : RoomDatabase.Callback() {
+				override fun onOpen(db: SupportSQLiteDatabase) {
+					super.onOpen(db)
+
+					val cursor = db.query("SELECT COUNT(*) FROM `folders`")
+					if (cursor.moveToNext()) {
+						val count = cursor.getInt(0)
+						if (count == 0) {
+							try {
+								db.execSQL("INSERT INTO `folders` (`name`) VALUES ('default')")
+							} catch (ex: Exception) {
+								ex.printStackTrace()
+							}
+						}
+					}
+				}
+			})
 			.build()
 	}
 
@@ -49,7 +67,7 @@ object DatabaseModule {
 			try {
 				database.execSQL("SELECT * FROM `folders` LIMIT 1")
 			} catch (ex: SQLException) {
-				database.execSQL("CREATE TABLE `folders` (`id` INTEGER PRIMARY KEY `name` TEXT NOT NULL)")
+				database.execSQL("CREATE TABLE `folders` (`id` INTEGER PRIMARY KEY, `name` TEXT NOT NULL)")
 			}
 
 			try {
